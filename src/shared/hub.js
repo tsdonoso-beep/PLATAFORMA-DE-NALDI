@@ -1,5 +1,3 @@
-import './styles/base.css'
-import './styles/components.css'
 
 // Set footer year
 const yearEl = document.getElementById('footer-year')

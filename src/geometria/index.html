@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Geometría Avanzada — Inroprin</title>
+  <link rel="stylesheet" href="/src/shared/styles/simulator.css" />
 </head>
 <body>
 
   <header class="site-header">
     <a class="header-logo" href="/">
       <span class="logo-mark">IP</span>
-      <div><span class="logo-text">Inroprin</span><div class="logo-subtext">Innovación Educativa</div></div>
+      <div><div class="logo-text">Inroprin</div><div class="logo-subtext">Innovación Educativa</div></div>
     </a>
     <nav class="site-nav">
       <a href="/">Inicio</a>
@@ -24,10 +25,12 @@
   </header>
 
   <main class="simulator-page">
-    <div class="page-hero page-hero--compact">
-      <div class="breadcrumb"><a href="/">← Inicio</a><span class="breadcrumb-sep">/</span><span>Geometría Avanzada</span></div>
-      <h1>Geometría Avanzada</h1>
-      <p>Centros del triángulo, línea de Euler y secciones cónicas</p>
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <div class="breadcrumb"><a href="/">← Inicio</a><span class="breadcrumb-sep">/</span><span>Geometría Avanzada</span></div>
+        <h1>Geometría Avanzada</h1>
+        <p>Centros del triángulo, línea de Euler y secciones cónicas interactivas</p>
+      </div>
     </div>
 
     <div class="simulator-body">
@@ -45,58 +48,32 @@
 
         <aside class="controls-panel">
 
-          <!-- TAB: Triángulo -->
           <div id="panel-triangulo" class="tab-panel active">
             <div class="panel-section-title">Centros del Triángulo</div>
-            <div style="display:flex; flex-direction:column; gap:0.4rem">
-              <label class="toggle-label"><input type="checkbox" id="chk-centroid" checked> <span style="color:#00529B">■</span> Centroide (G)</label>
-              <label class="toggle-label"><input type="checkbox" id="chk-circum"> <span style="color:#e07b00">■</span> Circuncentro (O) + circunferencia</label>
-              <label class="toggle-label"><input type="checkbox" id="chk-incenter"> <span style="color:#2a7d4f">■</span> Incentro (I) + incírculo</label>
-              <label class="toggle-label"><input type="checkbox" id="chk-ortho"> <span style="color:#9b0045">■</span> Ortocentro (H)</label>
-              <label class="toggle-label"><input type="checkbox" id="chk-euler"> <span style="color:#555">—</span> Línea de Euler (O–G–H)</label>
-              <label class="toggle-label"><input type="checkbox" id="chk-altitudes"> Alturas</label>
+            <div style="display:flex; flex-direction:column; gap:0.5rem">
+              <label class="toggle-label"><input type="checkbox" id="chk-centroid" checked> <span style="color:#00529B; font-weight:700">■</span> Centroide (G)</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-circum"> <span style="color:#e07b00; font-weight:700">■</span> Circuncentro (O) + circunferencia</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-incenter"> <span style="color:#10B981; font-weight:700">■</span> Incentro (I) + incírculo</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-ortho"> <span style="color:#EF4444; font-weight:700">■</span> Ortocentro (H)</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-euler"> <span style="color:#94A3B8">—</span> Línea de Euler (O–G–H)</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-altitudes"> Alturas del triángulo</label>
               <label class="toggle-label"><input type="checkbox" id="chk-medians"> Medianas</label>
             </div>
-            <div class="panel-section-title" style="margin-top:0.5rem">Ángulos internos</div>
+            <div class="panel-section-title">Ángulos internos</div>
             <div class="stat-grid">
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">∠A</div>
-                <div class="stat-value" id="stat-angA">—</div>
-              </div>
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">∠B</div>
-                <div class="stat-value" id="stat-angB">—</div>
-              </div>
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">∠C</div>
-                <div class="stat-value" id="stat-angC">—</div>
-              </div>
-              <div class="stat-block stat-block--success">
-                <div class="stat-label">Suma</div>
-                <div class="stat-value" id="stat-sum">180°</div>
-              </div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">∠A</div><div class="stat-value" id="stat-angA">—</div></div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">∠B</div><div class="stat-value" id="stat-angB">—</div></div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">∠C</div><div class="stat-value" id="stat-angC">—</div></div>
+              <div class="stat-block stat-block--success"><div class="stat-label">Suma</div><div class="stat-value" id="stat-sum">180°</div></div>
             </div>
             <div class="stat-grid">
-              <div class="stat-block">
-                <div class="stat-label">Área</div>
-                <div class="stat-value" id="stat-area">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">Tipo</div>
-                <div class="stat-value" id="stat-tipo">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">R (circunr.)</div>
-                <div class="stat-value" id="stat-R">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">r (inradio)</div>
-                <div class="stat-value" id="stat-r">—</div>
-              </div>
+              <div class="stat-block"><div class="stat-label">Área</div><div class="stat-value" id="stat-area">—</div></div>
+              <div class="stat-block"><div class="stat-label">Tipo</div><div class="stat-value" id="stat-tipo" style="font-size:11px">—</div></div>
+              <div class="stat-block"><div class="stat-label">R circunradio</div><div class="stat-value" id="stat-R">—</div></div>
+              <div class="stat-block"><div class="stat-label">r inradio</div><div class="stat-value" id="stat-r">—</div></div>
             </div>
           </div>
 
-          <!-- TAB: Cónicas -->
           <div id="panel-conicas" class="tab-panel">
             <div class="panel-section-title">Sección Cónica</div>
             <div class="control-group">
@@ -120,24 +97,12 @@
               <label>p = <span class="value-display" id="val-p">2</span></label>
               <input type="range" id="sl-p" min="0.2" max="6" step="0.1" value="2"/>
             </div>
-            <label class="toggle-label" style="margin-top:0.25rem"><input type="checkbox" id="chk-foci" checked> Mostrar focos y directriz</label>
+            <label class="toggle-label"><input type="checkbox" id="chk-foci" checked> Mostrar focos y directriz</label>
             <div class="stat-grid" style="margin-top:0.5rem">
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">Excentricidad e</div>
-                <div class="stat-value" id="stat-e">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">c (focal)</div>
-                <div class="stat-value" id="stat-c">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">Focos</div>
-                <div class="stat-value" id="stat-focos">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">Área</div>
-                <div class="stat-value" id="stat-carea">—</div>
-              </div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">Excentricidad e</div><div class="stat-value" id="stat-e">—</div></div>
+              <div class="stat-block"><div class="stat-label">c (distancia focal)</div><div class="stat-value" id="stat-c">—</div></div>
+              <div class="stat-block"><div class="stat-label">Focos</div><div class="stat-value" id="stat-focos">—</div></div>
+              <div class="stat-block"><div class="stat-label">Área</div><div class="stat-value" id="stat-carea">—</div></div>
             </div>
           </div>
 
@@ -147,7 +112,7 @@
   </main>
 
   <footer class="site-footer">
-    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp; © <span id="footer-year"></span></p>
+    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;·&nbsp; © <span id="footer-year"></span></p>
   </footer>
 
   <script type="module" src="./main.js"></script>

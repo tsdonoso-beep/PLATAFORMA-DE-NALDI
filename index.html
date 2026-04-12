@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plataforma de Simuladores Matemáticos — Inroprin</title>
+  <link rel="stylesheet" href="/src/shared/styles/global.css" />
 </head>
 <body>
 
@@ -11,7 +12,7 @@
     <a class="header-logo" href="/">
       <span class="logo-mark">IP</span>
       <div>
-        <span class="logo-text">Inroprin</span>
+        <div class="logo-text">Inroprin</div>
         <div class="logo-subtext">Innovación Educativa</div>
       </div>
     </a>
@@ -27,95 +28,126 @@
   </header>
 
   <main>
-    <section class="page-hero">
-      <h1>Plataforma de Simuladores Matemáticos</h1>
-      <p>6 laboratorios interactivos para docentes y estudiantes — explora, experimenta y aprende</p>
+    <section class="hub-hero">
+      <div class="hub-hero-inner">
+        <div class="hub-hero-badge">
+          <span class="hub-stat-pill-dot"></span>
+          Plataforma Educativa Digital
+        </div>
+        <h1>Laboratorios de <span>Matemáticas</span><br>y Ciencias</h1>
+        <p>6 simuladores interactivos de nivel avanzado para docentes y estudiantes. Explora, experimenta y aprende sin conexión a internet.</p>
+        <div class="hub-hero-stats">
+          <span class="hub-stat-pill"><span class="hub-stat-pill-dot"></span>6 Simuladores</span>
+          <span class="hub-stat-pill">100% Offline</span>
+          <span class="hub-stat-pill">Cálculo · Geometría · Física · Estadística</span>
+        </div>
+      </div>
     </section>
 
-    <section class="simulator-cards">
+    <section class="simulator-section">
+      <div class="section-label">Laboratorios disponibles</div>
+      <h2 class="section-title">Elige tu simulador</h2>
+      <p class="section-sub">Herramientas interactivas construidas con JSXGraph — el motor detrás de los mejores applets matemáticos.</p>
 
-      <div class="sim-card">
-        <div class="sim-card-icon">∫</div>
-        <h3>Cálculo Interactivo</h3>
-        <p>Grafica cualquier función, visualiza derivadas, sumas de Riemann con N ajustable, integrales definidas con área sombreada y series de Taylor.</p>
-        <div class="sim-card-tags">
-          <span class="tag">Derivadas</span>
-          <span class="tag">Integrales</span>
-          <span class="tag">Riemann</span>
-          <span class="tag">Taylor</span>
+      <div class="simulator-cards">
+
+        <div class="sim-card">
+          <div class="sim-card-header">
+            <div class="sim-card-icon">∫</div>
+            <span class="sim-card-num">01</span>
+          </div>
+          <h3>Cálculo Interactivo</h3>
+          <p>Grafica cualquier función, visualiza su derivada, construye sumas de Riemann con N ajustable y aproxima con series de Taylor hasta grado 12.</p>
+          <div class="sim-card-tags">
+            <span class="tag">Derivadas</span>
+            <span class="tag">Integrales</span>
+            <span class="tag">Riemann</span>
+            <span class="tag">Taylor</span>
+          </div>
+          <a href="/src/calculo/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
         </div>
-        <a href="/src/calculo/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
-      </div>
 
-      <div class="sim-card">
-        <div class="sim-card-icon">📐</div>
-        <h3>Geometría Avanzada</h3>
-        <p>Centros del triángulo (centroide, circuncentro, incentro, ortocentro), línea de Euler y secciones cónicas (elipse, parábola, hipérbola) con focos y directriz.</p>
-        <div class="sim-card-tags">
-          <span class="tag">Centros</span>
-          <span class="tag">Euler</span>
-          <span class="tag">Cónicas</span>
+        <div class="sim-card">
+          <div class="sim-card-header">
+            <div class="sim-card-icon">📐</div>
+            <span class="sim-card-num">02</span>
+          </div>
+          <h3>Geometría Avanzada</h3>
+          <p>Centros del triángulo (centroide, circuncentro, incentro, ortocentro) y línea de Euler. Secciones cónicas con focos, directriz y excentricidad.</p>
+          <div class="sim-card-tags">
+            <span class="tag">Centros</span>
+            <span class="tag">Línea de Euler</span>
+            <span class="tag">Cónicas</span>
+          </div>
+          <a href="/src/geometria/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
         </div>
-        <a href="/src/geometria/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
-      </div>
 
-      <div class="sim-card">
-        <div class="sim-card-icon">sin</div>
-        <h3>Círculo Unitario</h3>
-        <p>Animación del círculo unitario sincronizada con las ondas seno y coseno. Ajusta amplitud, frecuencia y fase. Visualiza las 6 funciones trigonométricas.</p>
-        <div class="sim-card-tags">
-          <span class="tag">sin/cos/tan</span>
-          <span class="tag">Ondas</span>
-          <span class="tag">Ángulos</span>
+        <div class="sim-card">
+          <div class="sim-card-header">
+            <div class="sim-card-icon">◎</div>
+            <span class="sim-card-num">03</span>
+          </div>
+          <h3>Círculo Unitario</h3>
+          <p>Círculo unitario animado sincronizado con ondas seno y coseno. Ajusta amplitud, frecuencia y fase. Visualiza las 6 funciones trigonométricas.</p>
+          <div class="sim-card-tags">
+            <span class="tag">sin / cos / tan</span>
+            <span class="tag">Ondas</span>
+            <span class="tag">Ángulos</span>
+          </div>
+          <a href="/src/trigonometria/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
         </div>
-        <a href="/src/trigonometria/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
-      </div>
 
-      <div class="sim-card">
-        <div class="sim-card-icon">🚀</div>
-        <h3>Física: Proyectil</h3>
-        <p>Lanza proyectiles con velocidad, ángulo y altura inicial ajustables. Elige entre Tierra, Luna y Marte. Visualiza vectores de velocidad y activa resistencia del aire.</p>
-        <div class="sim-card-tags">
-          <span class="tag">Cinemática</span>
-          <span class="tag">Vectores</span>
-          <span class="tag">Gravedad</span>
+        <div class="sim-card">
+          <div class="sim-card-header">
+            <div class="sim-card-icon">🚀</div>
+            <span class="sim-card-num">04</span>
+          </div>
+          <h3>Física: Proyectil</h3>
+          <p>Animación en tiempo real con vectores de velocidad. Elige entre Tierra, Luna, Marte y Júpiter. Activa resistencia del aire y compara trayectorias.</p>
+          <div class="sim-card-tags">
+            <span class="tag">Cinemática</span>
+            <span class="tag">Vectores</span>
+            <span class="tag">Gravedad</span>
+          </div>
+          <a href="/src/fisica/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
         </div>
-        <a href="/src/fisica/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
-      </div>
 
-      <div class="sim-card">
-        <div class="sim-card-icon">📊</div>
-        <h3>Estadística Visual</h3>
-        <p>Distribución normal con área sombreada entre z-scores. Regresión lineal con puntos arrastrables, R² en tiempo real e histograma interactivo.</p>
-        <div class="sim-card-tags">
-          <span class="tag">Distribuciones</span>
-          <span class="tag">Regresión</span>
-          <span class="tag">Probabilidad</span>
+        <div class="sim-card">
+          <div class="sim-card-header">
+            <div class="sim-card-icon">📊</div>
+            <span class="sim-card-num">05</span>
+          </div>
+          <h3>Estadística Visual</h3>
+          <p>Distribución normal con área entre z-scores en tiempo real. Regresión lineal con puntos arrastrables, R² y ecuación de la recta.</p>
+          <div class="sim-card-tags">
+            <span class="tag">Distribuciones</span>
+            <span class="tag">Regresión</span>
+            <span class="tag">Probabilidad</span>
+          </div>
+          <a href="/src/estadistica/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
         </div>
-        <a href="/src/estadistica/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
-      </div>
 
-      <div class="sim-card">
-        <div class="sim-card-icon">→</div>
-        <h3>Álgebra Vectorial</h3>
-        <p>Vectores 2D arrastrables con suma, resta, proyección, producto escalar, ángulo entre vectores y visualización del paralelogramo de fuerzas.</p>
-        <div class="sim-card-tags">
-          <span class="tag">Vectores</span>
-          <span class="tag">Proyección</span>
-          <span class="tag">Producto escalar</span>
+        <div class="sim-card">
+          <div class="sim-card-header">
+            <div class="sim-card-icon">→</div>
+            <span class="sim-card-num">06</span>
+          </div>
+          <h3>Álgebra Vectorial</h3>
+          <p>Vectores 2D arrastrables con suma, resta, proyección, producto escalar, ángulo entre vectores y paralelogramo de fuerzas visual.</p>
+          <div class="sim-card-tags">
+            <span class="tag">Vectores</span>
+            <span class="tag">Proyección</span>
+            <span class="tag">Producto escalar</span>
+          </div>
+          <a href="/src/vectores/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
         </div>
-        <a href="/src/vectores/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
-      </div>
 
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>
-      <strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp;
-      Plataforma de Innovación Pedagógica &nbsp;|&nbsp;
-      © <span id="footer-year"></span>
-    </p>
+    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;·&nbsp; Plataforma de Innovación Pedagógica &nbsp;·&nbsp; © <span id="footer-year"></span></p>
   </footer>
 
   <script type="module" src="/src/shared/hub.js"></script>

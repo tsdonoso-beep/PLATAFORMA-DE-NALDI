@@ -1,9 +1,4 @@
 import JXG from 'jsxgraph'
-import '../shared/styles/jsxgraph.css'
-import '../shared/styles/base.css'
-import '../shared/styles/components.css'
-import '../shared/styles/simulator-layout.css'
-import '../shared/styles/tabs.css'
 import { createBoard, attachResizeObserver } from '../shared/js/board-factory.js'
 import { formatNumber, toRadians } from '../shared/js/utils.js'
 

@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Círculo Unitario — Inroprin</title>
+  <link rel="stylesheet" href="/src/shared/styles/simulator.css" />
 </head>
 <body>
 
   <header class="site-header">
     <a class="header-logo" href="/">
       <span class="logo-mark">IP</span>
-      <div><span class="logo-text">Inroprin</span><div class="logo-subtext">Innovación Educativa</div></div>
+      <div><div class="logo-text">Inroprin</div><div class="logo-subtext">Innovación Educativa</div></div>
     </a>
     <nav class="site-nav">
       <a href="/">Inicio</a>
@@ -24,10 +25,12 @@
   </header>
 
   <main class="simulator-page">
-    <div class="page-hero page-hero--compact">
-      <div class="breadcrumb"><a href="/">← Inicio</a><span class="breadcrumb-sep">/</span><span>Trigonometría</span></div>
-      <h1>Círculo Unitario y Trigonometría</h1>
-      <p>Visualiza las funciones trigonométricas y sus ondas en tiempo real</p>
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <div class="breadcrumb"><a href="/">← Inicio</a><span class="breadcrumb-sep">/</span><span>Trigonometría</span></div>
+        <h1>Círculo Unitario y Trigonometría</h1>
+        <p>Visualiza las funciones trigonométricas y sus ondas sincronizadas en tiempo real</p>
+      </div>
     </div>
 
     <div class="simulator-body">
@@ -35,8 +38,8 @@
         <section class="board-section">
           <div class="board-toolbar">
             <button class="btn btn-outline btn-sm" id="btn-animate">▶ Animar</button>
-            <label class="toggle-label"><input type="checkbox" id="chk-cos" checked> cos</label>
-            <label class="toggle-label"><input type="checkbox" id="chk-tan"> tan</label>
+            <label class="toggle-label"><input type="checkbox" id="chk-cos" checked> cos(x)</label>
+            <label class="toggle-label"><input type="checkbox" id="chk-tan"> tan(x)</label>
             <label class="toggle-label"><input type="checkbox" id="chk-special"> Ángulos especiales</label>
           </div>
           <div class="two-boards-wrap">
@@ -53,47 +56,23 @@
               <input type="range" id="sl-theta" min="0" max="360" step="1" value="45"/>
             </div>
             <div class="stat-grid">
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">θ (rad)</div>
-                <div class="stat-value" id="stat-rad">—</div>
-              </div>
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">θ (°)</div>
-                <div class="stat-value" id="stat-deg">45°</div>
-              </div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">θ (rad)</div><div class="stat-value" id="stat-rad">—</div></div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">θ (°)</div><div class="stat-value" id="stat-deg">45°</div></div>
             </div>
           </div>
           <div>
             <div class="panel-section-title">Valores trigonométricos</div>
             <div class="stat-grid">
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">sin θ</div>
-                <div class="stat-value" id="stat-sin">—</div>
-              </div>
-              <div class="stat-block stat-block--highlight">
-                <div class="stat-label">cos θ</div>
-                <div class="stat-value" id="stat-cos">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">tan θ</div>
-                <div class="stat-value" id="stat-tan">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">cot θ</div>
-                <div class="stat-value" id="stat-cot">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">sec θ</div>
-                <div class="stat-value" id="stat-sec">—</div>
-              </div>
-              <div class="stat-block">
-                <div class="stat-label">csc θ</div>
-                <div class="stat-value" id="stat-csc">—</div>
-              </div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">sin θ</div><div class="stat-value" id="stat-sin">—</div></div>
+              <div class="stat-block stat-block--highlight"><div class="stat-label">cos θ</div><div class="stat-value" id="stat-cos">—</div></div>
+              <div class="stat-block"><div class="stat-label">tan θ</div><div class="stat-value" id="stat-tan">—</div></div>
+              <div class="stat-block"><div class="stat-label">cot θ</div><div class="stat-value" id="stat-cot">—</div></div>
+              <div class="stat-block"><div class="stat-label">sec θ</div><div class="stat-value" id="stat-sec">—</div></div>
+              <div class="stat-block"><div class="stat-label">csc θ</div><div class="stat-value" id="stat-csc">—</div></div>
             </div>
           </div>
           <div>
-            <div class="panel-section-title">Onda f(x) = A·sin(Bx + C) + D</div>
+            <div class="panel-section-title">Onda: A·sin(Bx + C) + D</div>
             <div class="control-group">
               <label>A (amplitud) = <span class="value-display" id="val-A">1</span></label>
               <input type="range" id="sl-A" min="-3" max="3" step="0.1" value="1"/>
@@ -117,7 +96,7 @@
   </main>
 
   <footer class="site-footer">
-    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp; © <span id="footer-year"></span></p>
+    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;·&nbsp; © <span id="footer-year"></span></p>
   </footer>
 
   <script type="module" src="./main.js"></script>
