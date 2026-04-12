@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estadística Visual — Inroprin</title>
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="header-logo" href="/">
+      <span class="logo-mark">IP</span>
+      <div><span class="logo-text">Inroprin</span><div class="logo-subtext">Innovación Educativa</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="/">Inicio</a>
+      <a href="/src/calculo/">Cálculo</a>
+      <a href="/src/geometria/">Geometría</a>
+      <a href="/src/trigonometria/">Trigonometría</a>
+      <a href="/src/fisica/">Física</a>
+      <a href="/src/estadistica/" data-current="true">Estadística</a>
+      <a href="/src/vectores/">Vectores</a>
+    </nav>
+  </header>
+
+  <main class="simulator-page">
+    <div class="page-hero page-hero--compact">
+      <div class="breadcrumb"><a href="/">← Inicio</a><span class="breadcrumb-sep">/</span><span>Estadística Visual</span></div>
+      <h1>Estadística Visual</h1>
+      <p>Distribución normal, regresión lineal e histograma interactivo</p>
+    </div>
+
+    <div class="simulator-body">
+      <div class="simulator-grid">
+        <section class="board-section">
+          <div class="board-toolbar">
+            <div class="tab-group">
+              <button class="tab-btn tab-active" data-tab="normal">Distribución Normal</button>
+              <button class="tab-btn" data-tab="regresion">Regresión Lineal</button>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-reset">Restablecer</button>
+          </div>
+          <div id="board-estadistica" class="jsxgraph-board-container"></div>
+        </section>
+
+        <aside class="controls-panel">
+
+          <!-- TAB: Normal -->
+          <div id="panel-normal" class="tab-panel active">
+            <div class="panel-section-title">Distribución Normal N(μ, σ)</div>
+            <div class="control-group">
+              <label>μ (media) = <span class="value-display" id="val-mu">0</span></label>
+              <input type="range" id="sl-mu" min="-5" max="5" step="0.1" value="0"/>
+            </div>
+            <div class="control-group">
+              <label>σ (desv. estándar) = <span class="value-display" id="val-sigma">1</span></label>
+              <input type="range" id="sl-sigma" min="0.2" max="4" step="0.1" value="1"/>
+            </div>
+            <div class="panel-section-title" style="margin-top:0.25rem">Intervalo de área</div>
+            <div class="control-group">
+              <label>a = <span class="value-display" id="val-na">-1</span></label>
+              <input type="range" id="sl-na" min="-10" max="10" step="0.1" value="-1"/>
+            </div>
+            <div class="control-group">
+              <label>b = <span class="value-display" id="val-nb">1</span></label>
+              <input type="range" id="sl-nb" min="-10" max="10" step="0.1" value="1"/>
+            </div>
+            <div class="stat-grid" style="margin-top:0.25rem">
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">P(a ≤ X ≤ b)</div>
+                <div class="stat-value" id="stat-prob">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">P(X ≤ a)</div>
+                <div class="stat-value" id="stat-cdf-a">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">z(a)</div>
+                <div class="stat-value" id="stat-za">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">z(b)</div>
+                <div class="stat-value" id="stat-zb">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Moda</div>
+                <div class="stat-value" id="stat-moda">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Varianza σ²</div>
+                <div class="stat-value" id="stat-var">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: Regresión -->
+          <div id="panel-regresion" class="tab-panel">
+            <div class="panel-section-title">Regresión Lineal</div>
+            <p style="font-size:13px; color:var(--color-text-muted); margin-bottom:0.5rem">Arrastra los puntos o haz clic en el tablero para agregar nuevos.</p>
+            <button class="btn btn-outline btn-sm" id="btn-add-pt" style="margin-bottom:0.5rem">+ Agregar punto aleatorio</button>
+            <button class="btn btn-outline btn-sm" id="btn-remove-pt">− Quitar último</button>
+            <div class="stat-grid" style="margin-top:0.75rem">
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">R² (correlación)</div>
+                <div class="stat-value" id="stat-r2">—</div>
+              </div>
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">Pearson r</div>
+                <div class="stat-value" id="stat-r">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Pendiente m</div>
+                <div class="stat-value" id="stat-m">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Intercepto b</div>
+                <div class="stat-value" id="stat-b">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Media x̄</div>
+                <div class="stat-value" id="stat-xbar">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Media ȳ</div>
+                <div class="stat-value" id="stat-ybar">—</div>
+              </div>
+            </div>
+            <div class="stat-block" style="margin-top:0.5rem">
+              <div class="stat-label">Ecuación</div>
+              <div class="stat-value" id="stat-eq" style="font-size:13px">—</div>
+            </div>
+            <div class="stat-block" style="margin-top:0.4rem">
+              <div class="stat-label">Interpretación</div>
+              <div class="stat-value" id="stat-interp" style="font-size:11px; font-family:var(--font-sans); color:var(--color-text-muted)">—</div>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp; © <span id="footer-year"></span></p>
+  </footer>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

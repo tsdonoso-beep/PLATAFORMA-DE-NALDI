@@ -1,0 +1,95 @@
+/* ── Tab group (toolbar tabs) ── */
+.tab-group {
+  display: flex;
+  gap: 0.15rem;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 3px;
+}
+
+.tab-btn {
+  padding: 0.3rem 0.85rem;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.tab-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.tab-btn.tab-active { background: #fff; color: var(--color-primary); }
+
+/* ── Tab panels (controls sidebar) ── */
+.tab-panel { display: none; flex-direction: column; gap: 1rem; }
+.tab-panel.active { display: flex; }
+
+/* ── Function text input ── */
+.fn-input {
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.fn-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--color-primary-light); }
+
+/* ── Toggle label (checkbox + text inline) ── */
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.toggle-label input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  width: 14px; height: 14px;
+  cursor: pointer;
+}
+
+/* ── Two boards side-by-side (Trigonometría) ── */
+.two-boards-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.two-boards-wrap .jsxgraph-board-container {
+  height: min(480px, calc(50vh));
+  min-height: 340px;
+}
+
+@media (max-width: 860px) {
+  .two-boards-wrap { grid-template-columns: 1fr; }
+}
+
+/* ── Projectile launch button ── */
+.btn-launch {
+  background: linear-gradient(135deg, #e07b00, #b45309);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  width: 100%;
+  letter-spacing: 0.5px;
+  transition: opacity 0.18s, transform 0.12s;
+  margin-top: 0.25rem;
+}
+.btn-launch:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-launch:active { transform: translateY(0); }

@@ -17,8 +17,11 @@
     </a>
     <nav class="site-nav">
       <a href="/" data-current="true">Inicio</a>
-      <a href="/src/funciones/">Funciones</a>
+      <a href="/src/calculo/">Cálculo</a>
       <a href="/src/geometria/">Geometría</a>
+      <a href="/src/trigonometria/">Trigonometría</a>
+      <a href="/src/fisica/">Física</a>
+      <a href="/src/estadistica/">Estadística</a>
       <a href="/src/vectores/">Vectores</a>
     </nav>
   </header>
@@ -26,56 +29,82 @@
   <main>
     <section class="page-hero">
       <h1>Plataforma de Simuladores Matemáticos</h1>
-      <p>Herramientas interactivas para explorar conceptos matemáticos de forma visual e intuitiva</p>
+      <p>6 laboratorios interactivos para docentes y estudiantes — explora, experimenta y aprende</p>
     </section>
 
     <section class="simulator-cards">
 
       <div class="sim-card">
-        <div class="sim-card-icon">📈</div>
-        <h3>Explorador de Funciones</h3>
-        <p>
-          Visualiza funciones polinomiales cuadráticas y cúbicas. Ajusta los coeficientes
-          con sliders y observa en tiempo real cómo cambian las raíces, el vértice y
-          la recta tangente.
-        </p>
+        <div class="sim-card-icon">∫</div>
+        <h3>Cálculo Interactivo</h3>
+        <p>Grafica cualquier función, visualiza derivadas, sumas de Riemann con N ajustable, integrales definidas con área sombreada y series de Taylor.</p>
         <div class="sim-card-tags">
-          <span class="tag">Álgebra</span>
-          <span class="tag">Cálculo</span>
-          <span class="tag">Funciones</span>
+          <span class="tag">Derivadas</span>
+          <span class="tag">Integrales</span>
+          <span class="tag">Riemann</span>
+          <span class="tag">Taylor</span>
         </div>
-        <a href="/src/funciones/" class="btn btn-primary btn-block">Abrir Simulador</a>
+        <a href="/src/calculo/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
       </div>
 
       <div class="sim-card">
         <div class="sim-card-icon">📐</div>
-        <h3>Laboratorio de Geometría</h3>
-        <p>
-          Arrastra los vértices de un triángulo y observa cómo cambian sus ángulos
-          (siempre sumando 180°), el área y la demostración visual del
-          Teorema de Pitágoras.
-        </p>
+        <h3>Geometría Avanzada</h3>
+        <p>Centros del triángulo (centroide, circuncentro, incentro, ortocentro), línea de Euler y secciones cónicas (elipse, parábola, hipérbola) con focos y directriz.</p>
         <div class="sim-card-tags">
-          <span class="tag">Geometría</span>
-          <span class="tag">Triángulos</span>
-          <span class="tag">Pitágoras</span>
+          <span class="tag">Centros</span>
+          <span class="tag">Euler</span>
+          <span class="tag">Cónicas</span>
         </div>
-        <a href="/src/geometria/" class="btn btn-primary btn-block">Abrir Simulador</a>
+        <a href="/src/geometria/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
       </div>
 
       <div class="sim-card">
-        <div class="sim-card-icon">🧭</div>
+        <div class="sim-card-icon">sin</div>
+        <h3>Círculo Unitario</h3>
+        <p>Animación del círculo unitario sincronizada con las ondas seno y coseno. Ajusta amplitud, frecuencia y fase. Visualiza las 6 funciones trigonométricas.</p>
+        <div class="sim-card-tags">
+          <span class="tag">sin/cos/tan</span>
+          <span class="tag">Ondas</span>
+          <span class="tag">Ángulos</span>
+        </div>
+        <a href="/src/trigonometria/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-icon">🚀</div>
+        <h3>Física: Proyectil</h3>
+        <p>Lanza proyectiles con velocidad, ángulo y altura inicial ajustables. Elige entre Tierra, Luna y Marte. Visualiza vectores de velocidad y activa resistencia del aire.</p>
+        <div class="sim-card-tags">
+          <span class="tag">Cinemática</span>
+          <span class="tag">Vectores</span>
+          <span class="tag">Gravedad</span>
+        </div>
+        <a href="/src/fisica/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-icon">📊</div>
+        <h3>Estadística Visual</h3>
+        <p>Distribución normal con área sombreada entre z-scores. Regresión lineal con puntos arrastrables, R² en tiempo real e histograma interactivo.</p>
+        <div class="sim-card-tags">
+          <span class="tag">Distribuciones</span>
+          <span class="tag">Regresión</span>
+          <span class="tag">Probabilidad</span>
+        </div>
+        <a href="/src/estadistica/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-icon">→</div>
         <h3>Álgebra Vectorial</h3>
-        <p>
-          Manipula vectores 2D en un plano cartesiano. Visualiza la suma, resta,
-          el paralelogramo de fuerzas, el producto escalar y el ángulo entre vectores.
-        </p>
+        <p>Vectores 2D arrastrables con suma, resta, proyección, producto escalar, ángulo entre vectores y visualización del paralelogramo de fuerzas.</p>
         <div class="sim-card-tags">
           <span class="tag">Vectores</span>
-          <span class="tag">Álgebra Lineal</span>
-          <span class="tag">Física</span>
+          <span class="tag">Proyección</span>
+          <span class="tag">Producto escalar</span>
         </div>
-        <a href="/src/vectores/" class="btn btn-primary btn-block">Abrir Simulador</a>
+        <a href="/src/vectores/" class="btn btn-primary btn-block">Abrir Laboratorio</a>
       </div>
 
     </section>

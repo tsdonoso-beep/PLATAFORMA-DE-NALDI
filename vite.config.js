@@ -8,12 +8,16 @@ export default defineConfig({
   publicDir: 'public',
   build: {
     outDir: 'dist',
+    chunkSizeWarningLimit: 1200,
     rollupOptions: {
       input: {
-        hub:       r('index.html'),
-        funciones: r('src/funciones/index.html'),
-        geometria: r('src/geometria/index.html'),
-        vectores:  r('src/vectores/index.html'),
+        hub:           r('index.html'),
+        calculo:       r('src/calculo/index.html'),
+        geometria:     r('src/geometria/index.html'),
+        vectores:      r('src/vectores/index.html'),
+        fisica:        r('src/fisica/index.html'),
+        trigonometria: r('src/trigonometria/index.html'),
+        estadistica:   r('src/estadistica/index.html'),
       },
     },
   },

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cálculo Interactivo — Inroprin</title>
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="header-logo" href="/">
+      <span class="logo-mark">IP</span>
+      <div><span class="logo-text">Inroprin</span><div class="logo-subtext">Innovación Educativa</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="/">Inicio</a>
+      <a href="/src/calculo/" data-current="true">Cálculo</a>
+      <a href="/src/geometria/">Geometría</a>
+      <a href="/src/trigonometria/">Trigonometría</a>
+      <a href="/src/fisica/">Física</a>
+      <a href="/src/estadistica/">Estadística</a>
+      <a href="/src/vectores/">Vectores</a>
+    </nav>
+  </header>
+
+  <main class="simulator-page">
+    <div class="page-hero page-hero--compact">
+      <div class="breadcrumb"><a href="/">← Inicio</a><span class="breadcrumb-sep">/</span><span>Cálculo Interactivo</span></div>
+      <h1>Cálculo Interactivo</h1>
+      <p>Derivadas, integrales, sumas de Riemann y series de Taylor</p>
+    </div>
+
+    <div class="simulator-body">
+      <div class="simulator-grid">
+
+        <section class="board-section">
+          <div class="board-toolbar">
+            <div class="tab-group">
+              <button class="tab-btn tab-active" data-tab="funciones">Funciones</button>
+              <button class="tab-btn" data-tab="riemann">Sumas de Riemann</button>
+              <button class="tab-btn" data-tab="taylor">Serie de Taylor</button>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-reset">Restablecer</button>
+          </div>
+          <div id="board-calculo" class="jsxgraph-board-container"></div>
+        </section>
+
+        <aside class="controls-panel">
+
+          <!-- TAB: Funciones -->
+          <div id="panel-funciones" class="tab-panel active">
+            <div class="panel-section-title">Función principal f(x)</div>
+            <div class="control-group">
+              <label>f(x) =</label>
+              <input type="text" id="input-fx" value="x^2 - 2*x - 3" class="fn-input" spellcheck="false"/>
+            </div>
+            <div class="control-group">
+              <label style="justify-content:space-between">g(x) = <label class="toggle-label"><input type="checkbox" id="chk-gx"> Mostrar</label></label>
+              <input type="text" id="input-gx" value="sin(x)*3" class="fn-input" spellcheck="false"/>
+            </div>
+            <div class="control-group" style="flex-direction:row; gap:0.5rem; flex-wrap:wrap">
+              <label class="toggle-label"><input type="checkbox" id="chk-deriv" checked> f'(x)</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-tangent" checked> Tangente</label>
+              <label class="toggle-label"><input type="checkbox" id="chk-roots"> Raíces</label>
+            </div>
+            <div class="panel-section-title" style="margin-top:0.5rem">Resultados</div>
+            <div class="stat-grid">
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">f(x₀)</div>
+                <div class="stat-value" id="stat-fx0">—</div>
+              </div>
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">f'(x₀)</div>
+                <div class="stat-value" id="stat-dfx0">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">x₀ (tangente)</div>
+                <div class="stat-value" id="stat-x0">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Pendiente</div>
+                <div class="stat-value" id="stat-slope">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: Riemann -->
+          <div id="panel-riemann" class="tab-panel">
+            <div class="panel-section-title">Sumas de Riemann</div>
+            <div class="control-group">
+              <label>Función f(x) =</label>
+              <input type="text" id="input-rfx" value="x^2 - 2*x + 2" class="fn-input" spellcheck="false"/>
+            </div>
+            <div class="control-group">
+              <label>Tipo de suma</label>
+              <select id="sel-riemann-type">
+                <option value="left">Izquierda (Left)</option>
+                <option value="right">Derecha (Right)</option>
+                <option value="middle" selected>Punto medio (Midpoint)</option>
+                <option value="trapezoidal">Trapecio</option>
+                <option value="upper">Superior</option>
+                <option value="lower">Inferior</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label>N = <span class="value-display" id="val-n">10</span> rectángulos</label>
+              <input type="range" id="sl-n" min="1" max="100" step="1" value="10"/>
+            </div>
+            <div class="control-group">
+              <label>a = <span class="value-display" id="val-ra">-1</span></label>
+              <input type="range" id="sl-ra" min="-8" max="8" step="0.25" value="-1"/>
+            </div>
+            <div class="control-group">
+              <label>b = <span class="value-display" id="val-rb">3</span></label>
+              <input type="range" id="sl-rb" min="-8" max="8" step="0.25" value="3"/>
+            </div>
+            <div class="stat-grid" style="margin-top:0.5rem">
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">Suma de Riemann</div>
+                <div class="stat-value" id="stat-riemann">—</div>
+              </div>
+              <div class="stat-block stat-block--success">
+                <div class="stat-label">Integral exacta</div>
+                <div class="stat-value" id="stat-integral">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Error</div>
+                <div class="stat-value" id="stat-error">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: Taylor -->
+          <div id="panel-taylor" class="tab-panel">
+            <div class="panel-section-title">Serie de Taylor / Maclaurin</div>
+            <div class="control-group">
+              <label>Función f(x) =</label>
+              <input type="text" id="input-tfx" value="sin(x)" class="fn-input" spellcheck="false"/>
+            </div>
+            <div class="control-group">
+              <label>Centro a = <span class="value-display" id="val-ta">0</span></label>
+              <input type="range" id="sl-ta" min="-5" max="5" step="0.5" value="0"/>
+            </div>
+            <div class="control-group">
+              <label>Grado n = <span class="value-display" id="val-tn">3</span></label>
+              <input type="range" id="sl-tn" min="1" max="12" step="1" value="3"/>
+            </div>
+            <div class="stat-block" style="margin-top:0.5rem">
+              <div class="stat-label">Polinomio P(x)</div>
+              <div class="stat-value" id="stat-taylor-poly" style="font-size:11px; word-break:break-all; white-space:pre-wrap">—</div>
+            </div>
+            <div class="stat-grid" style="margin-top:0.5rem">
+              <div class="stat-block">
+                <div class="stat-label">f(a)</div>
+                <div class="stat-value" id="stat-tfa">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">P(a)</div>
+                <div class="stat-value" id="stat-tpa">—</div>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp; © <span id="footer-year"></span></p>
+  </footer>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
