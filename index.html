@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plataforma de Simuladores Matemáticos — Inroprin</title>
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="header-logo" href="/">
+      <span class="logo-mark">IP</span>
+      <div>
+        <span class="logo-text">Inroprin</span>
+        <div class="logo-subtext">Innovación Educativa</div>
+      </div>
+    </a>
+    <nav class="site-nav">
+      <a href="/" data-current="true">Inicio</a>
+      <a href="/src/funciones/">Funciones</a>
+      <a href="/src/geometria/">Geometría</a>
+      <a href="/src/vectores/">Vectores</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1>Plataforma de Simuladores Matemáticos</h1>
+      <p>Herramientas interactivas para explorar conceptos matemáticos de forma visual e intuitiva</p>
+    </section>
+
+    <section class="simulator-cards">
+
+      <div class="sim-card">
+        <div class="sim-card-icon">📈</div>
+        <h3>Explorador de Funciones</h3>
+        <p>
+          Visualiza funciones polinomiales cuadráticas y cúbicas. Ajusta los coeficientes
+          con sliders y observa en tiempo real cómo cambian las raíces, el vértice y
+          la recta tangente.
+        </p>
+        <div class="sim-card-tags">
+          <span class="tag">Álgebra</span>
+          <span class="tag">Cálculo</span>
+          <span class="tag">Funciones</span>
+        </div>
+        <a href="/src/funciones/" class="btn btn-primary btn-block">Abrir Simulador</a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-icon">📐</div>
+        <h3>Laboratorio de Geometría</h3>
+        <p>
+          Arrastra los vértices de un triángulo y observa cómo cambian sus ángulos
+          (siempre sumando 180°), el área y la demostración visual del
+          Teorema de Pitágoras.
+        </p>
+        <div class="sim-card-tags">
+          <span class="tag">Geometría</span>
+          <span class="tag">Triángulos</span>
+          <span class="tag">Pitágoras</span>
+        </div>
+        <a href="/src/geometria/" class="btn btn-primary btn-block">Abrir Simulador</a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-icon">🧭</div>
+        <h3>Álgebra Vectorial</h3>
+        <p>
+          Manipula vectores 2D en un plano cartesiano. Visualiza la suma, resta,
+          el paralelogramo de fuerzas, el producto escalar y el ángulo entre vectores.
+        </p>
+        <div class="sim-card-tags">
+          <span class="tag">Vectores</span>
+          <span class="tag">Álgebra Lineal</span>
+          <span class="tag">Física</span>
+        </div>
+        <a href="/src/vectores/" class="btn btn-primary btn-block">Abrir Simulador</a>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      <strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp;
+      Plataforma de Innovación Pedagógica &nbsp;|&nbsp;
+      © <span id="footer-year"></span>
+    </p>
+  </footer>
+
+  <script type="module" src="/src/shared/hub.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio de Geometría — Inroprin</title>
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="header-logo" href="/">
+      <span class="logo-mark">IP</span>
+      <div>
+        <span class="logo-text">Inroprin</span>
+        <div class="logo-subtext">Innovación Educativa</div>
+      </div>
+    </a>
+    <nav class="site-nav">
+      <a href="/">Inicio</a>
+      <a href="/src/funciones/">Funciones</a>
+      <a href="/src/geometria/" data-current="true">Geometría</a>
+      <a href="/src/vectores/">Vectores</a>
+    </nav>
+  </header>
+
+  <main class="simulator-page">
+    <div class="page-hero page-hero--compact">
+      <div class="breadcrumb">
+        <a href="/">← Inicio</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Laboratorio de Geometría</span>
+      </div>
+      <h1>Laboratorio de Geometría</h1>
+      <p>Arrastra los vértices del triángulo y explora sus propiedades</p>
+    </div>
+
+    <div class="simulator-body">
+      <div class="simulator-grid">
+
+        <!-- Board -->
+        <section class="board-section">
+          <div class="board-toolbar">
+            <button class="btn btn-outline btn-sm" id="btn-reset">Restablecer</button>
+            <button class="btn btn-outline btn-sm" id="btn-toggle-squares">Cuadrados: ON</button>
+            <button class="btn btn-outline btn-sm" id="btn-toggle-labels">Medidas: ON</button>
+          </div>
+          <div id="board-geometria" class="jsxgraph-board-container"></div>
+        </section>
+
+        <!-- Controls -->
+        <aside class="controls-panel">
+
+          <div>
+            <div class="panel-section-title">Ángulos internos</div>
+            <div class="stat-grid">
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">Ángulo A</div>
+                <div class="stat-value" id="stat-angA">60°</div>
+              </div>
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">Ángulo B</div>
+                <div class="stat-value" id="stat-angB">60°</div>
+              </div>
+              <div class="stat-block stat-block--highlight">
+                <div class="stat-label">Ángulo C</div>
+                <div class="stat-value" id="stat-angC">60°</div>
+              </div>
+              <div class="stat-block stat-block--success">
+                <div class="stat-label">Suma A+B+C</div>
+                <div class="stat-value" id="stat-sum">180°</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="panel-section-title">Medidas</div>
+            <div class="stat-grid">
+              <div class="stat-block">
+                <div class="stat-label">Lado a (BC)</div>
+                <div class="stat-value" id="stat-sideA">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Lado b (CA)</div>
+                <div class="stat-value" id="stat-sideB">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Lado c (AB)</div>
+                <div class="stat-value" id="stat-sideC">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">Área</div>
+                <div class="stat-value" id="stat-area">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="panel-section-title">Teorema de Pitágoras</div>
+            <div class="stat-block" id="stat-pythag-block">
+              <div class="stat-label">Estado</div>
+              <div class="stat-value" id="stat-pythag">—</div>
+            </div>
+            <div class="stat-grid" style="margin-top:0.6rem">
+              <div class="stat-block">
+                <div class="stat-label">a²</div>
+                <div class="stat-value" id="stat-a2">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">b²</div>
+                <div class="stat-value" id="stat-b2">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">c²</div>
+                <div class="stat-value" id="stat-c2">—</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-label">a²+b²</div>
+                <div class="stat-value" id="stat-ab2">—</div>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>Industrias Roland Print — Inroprin</strong> &nbsp;|&nbsp; © <span id="footer-year"></span></p>
+  </footer>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

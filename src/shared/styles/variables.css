@@ -1,0 +1,45 @@
+:root {
+  /* Inroprin brand palette */
+  --color-primary:       #00529B;
+  --color-primary-dark:  #003d75;
+  --color-primary-light: #e8f2fc;
+  --color-surface:       #F5F5F5;
+  --color-bg:            #FFFFFF;
+  --color-text:          #333333;
+  --color-text-muted:    #666666;
+  --color-border:        #d0d7de;
+  --color-success:       #2a7d4f;
+  --color-warning:       #b45309;
+  --color-accent:        #e07b00;
+
+  /* Layout */
+  --header-height:    64px;
+  --sidebar-width:    300px;
+  --board-min-height: 460px;
+  --radius:           8px;
+  --radius-lg:        12px;
+  --shadow-card:      0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-elevated:  0 4px 20px rgba(0, 82, 155, 0.14);
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+  --font-size-xs:   12px;
+  --font-size-sm:   14px;
+  --font-size-base: 16px;
+  --font-size-lg:   18px;
+  --font-size-xl:   22px;
+  --font-size-2xl:  28px;
+  --font-size-3xl:  36px;
+
+  /* Math board colors */
+  --board-bg:        #fafcff;
+  --board-grid:      #e3eaf4;
+  --board-axis:      #00529B;
+  --curve-color:     #e07b00;
+  --curve-width:     2.5;
+  --vec-u-color:     #00529B;
+  --vec-v-color:     #e07b00;
+  --vec-sum-color:   #2a7d4f;
+  --vec-diff-color:  #9b0045;
+}
