@@ -18,6 +18,7 @@ export default defineConfig({
         fisica:        r('src/fisica/index.html'),
         trigonometria: r('src/trigonometria/index.html'),
         estadistica:   r('src/estadistica/index.html'),
+        calculadora:   r('src/calculadora/index.html'),
       },
     },
   },
