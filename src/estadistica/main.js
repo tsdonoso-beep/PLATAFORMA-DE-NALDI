@@ -4,6 +4,9 @@ import { formatNumber } from '../shared/js/utils.js'
 
 document.getElementById('footer-year').textContent = new Date().getFullYear()
 
+// ── State (declared early so event handlers can reference it) ──────────────
+let activeTab = 'normal'
+
 // ── Board ──────────────────────────────────────────────────────────────────
 const board = createBoard('board-estadistica', { bbox: [-5, 0.55, 5, -0.1], keepAspectRatio: false })
 
@@ -214,7 +217,6 @@ document.getElementById('btn-add-pt').addEventListener('click', () => {
 document.getElementById('btn-remove-pt').addEventListener('click', removeLastPoint)
 
 // ── Tab switching ──────────────────────────────────────────────────────────
-let activeTab = 'normal'
 
 function switchBoardForNormal() {
   // Remove regression points and line
