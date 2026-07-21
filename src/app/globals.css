@@ -2,32 +2,149 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Sistema de diseño — "Operaciones de comercio exterior"
+   Tinta navy + papel cálido + acento ámbar (celdas editables).
+   ============================================================ */
 :root {
-  --bg: #f4f5f7;
+  --paper: #f4f1ea;
+  --paper-2: #efeae0;
+  --surface: #ffffff;
+  --ink: #16233b;
+  --ink-2: #33415c;
+  --ink-soft: #64708a;
+  --line: #e5dfd2;
+  --line-strong: #d6cebb;
+  --accent: #b9781d;
+  --accent-soft: #f6e8cf;
+  --ok: #2f7d4f;
+  --warn: #c98a00;
+  --bad: #bd3f28;
+  --edit: #fbf4d9;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(22, 35, 59, 0.04), 0 8px 24px -12px rgba(22, 35, 59, 0.18);
+  --shadow-sm: 0 1px 2px rgba(22, 35, 59, 0.06);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--bg);
-  color: #1f2937;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 100% -5%, rgba(185, 120, 29, 0.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 0%, rgba(22, 35, 59, 0.05), transparent 55%),
+    var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Tabla compacta reutilizable */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+.font-mono-num {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Cards / superficies ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hairline {
+  border: 1px solid var(--line);
+}
+
+/* ---- Botones ---- */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition;
+  font-family: var(--font-body);
+}
+.btn-primary {
+  background: var(--ink);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #0f1a2e;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+}
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-accent:hover {
+  filter: brightness(1.05);
+}
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--ink-2);
+  background: var(--surface);
+}
+.btn-ghost:hover {
+  background: var(--paper-2);
+}
+
+/* ---- Chips / etiquetas ---- */
+.chip {
+  @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium;
+}
+
+/* ---- Tabla de datos ---- */
 .tbl {
   @apply w-full border-collapse text-sm;
 }
 .tbl th {
-  @apply bg-slate-100 border border-slate-300 px-2 py-1 text-left font-semibold text-slate-700;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  @apply px-2 py-1.5 text-left font-semibold;
+  color: var(--ink-2);
+  font-size: 12px;
 }
 .tbl td {
-  @apply border border-slate-300 px-2 py-1 align-top;
+  border: 1px solid var(--line);
+  @apply px-2 py-1 align-middle;
 }
 .tbl input {
   @apply w-full bg-transparent outline-none;
+  font-family: var(--font-body);
 }
 .cell-edit {
-  background: #fffef0;
+  background: var(--edit);
 }
 .cell-edit:focus-within {
-  background: #fff7cc;
+  background: #f6ecb6;
+}
+
+/* Números tabulares en celdas de costeo */
+.tbl-num td,
+.tbl-num th {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Reveal en carga ---- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

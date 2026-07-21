@@ -46,8 +46,10 @@ export default function UploadZone({ onAdd }: { onAdd: (docs: DocItem[]) => void
         procesar(e.dataTransfer.files);
       }}
       onClick={() => inputRef.current?.click()}
-      className={`cursor-pointer rounded-xl border-2 border-dashed p-10 text-center transition ${
-        dragOver ? "border-blue-500 bg-blue-50" : "border-slate-300 bg-white"
+      className={`cursor-pointer rounded-xl border-2 border-dashed p-12 text-center transition ${
+        dragOver
+          ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+          : "border-[var(--line-strong)] bg-white/60 hover:bg-white"
       }`}
     >
       <input
@@ -58,11 +60,13 @@ export default function UploadZone({ onAdd }: { onAdd: (docs: DocItem[]) => void
         className="hidden"
         onChange={(e) => e.target.files && procesar(e.target.files)}
       />
-      <div className="text-4xl">📄</div>
-      <p className="mt-2 font-medium text-slate-700">
+      <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[var(--paper-2)] text-2xl">
+        📄
+      </div>
+      <p className="mt-3 font-display text-lg font-semibold text-[var(--ink)]">
         Arrastra los PDFs de la OC aquí
       </p>
-      <p className="text-sm text-slate-500">o haz clic para seleccionar archivos</p>
+      <p className="mt-0.5 text-sm text-[var(--ink-soft)]">o haz clic para seleccionar archivos</p>
     </div>
   );
 }

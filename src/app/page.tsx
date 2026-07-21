@@ -136,161 +136,240 @@ export default function Home() {
     setNombreOC("");
   }
 
+  const pasoActual = fase === "carga" ? 1 : fase === "procesando" ? 2 : 3;
+  const fmtMoney = (n: number) =>
+    n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <header className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-800">
-            Extractor de Costeo de Importaciones
-          </h1>
-          <p className="text-sm text-slate-500">
-            Sube los documentos de la OC → Gemini los clasifica y extrae → corriges → exportas el costeo.
-          </p>
+    <div className="min-h-screen">
+      {/* ---------- BARRA SUPERIOR ---------- */}
+      <header className="sticky top-0 z-20 border-b border-[var(--line)] bg-[var(--paper)]/85 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
+          <div className="flex items-center gap-3">
+            <div className="grid h-9 w-9 place-items-center rounded-lg bg-[var(--ink)] font-mono-num text-sm font-semibold text-white">
+              OC
+            </div>
+            <div className="leading-tight">
+              <div className="font-display text-[15px] font-semibold text-[var(--ink)]">
+                Costeo de Importaciones
+              </div>
+              <div className="text-[11px] uppercase tracking-wide text-[var(--ink-soft)]">
+                INROPRIN · Extractor + Costeo
+              </div>
+            </div>
+          </div>
+          <ApiKeyConfig onChange={setApiKeyState} />
         </div>
-        <ApiKeyConfig onChange={setApiKeyState} />
       </header>
 
-      {/* ---------- FASE CARGA ---------- */}
-      {fase === "carga" && (
-        <div className="space-y-6">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slate-600">
-              Nombre / N° de la OC
-            </label>
-            <input
-              className="w-full max-w-md rounded-md border border-slate-300 px-3 py-2"
-              placeholder="Ej: OC-2025-0142"
-              value={nombreOC}
-              onChange={(e) => setNombreOC(e.target.value)}
-            />
+      <main className="mx-auto max-w-6xl px-5 py-8">
+        {/* ---------- STEPPER ---------- */}
+        <Stepper paso={pasoActual} />
+
+        {/* ---------- FASE CARGA ---------- */}
+        {fase === "carga" && (
+          <div className="space-y-6 rise">
+            <section className="card p-5">
+              <label className="mb-1.5 block text-sm font-medium text-[var(--ink-2)]">
+                Nombre / N° de la OC
+              </label>
+              <input
+                className="w-full max-w-md rounded-lg border border-[var(--line-strong)] bg-white px-3 py-2 font-mono-num outline-none focus:border-[var(--accent)]"
+                placeholder="Ej: OC-2025-0142"
+                value={nombreOC}
+                onChange={(e) => setNombreOC(e.target.value)}
+              />
+            </section>
+
+            <UploadZone onAdd={(nuevos) => setDocs((d) => [...d, ...nuevos])} />
+
+            {docs.length > 0 && (
+              <section className="card p-5">
+                <div className="mb-4 flex items-baseline justify-between">
+                  <h2 className="text-lg font-semibold text-[var(--ink)]">Documentos</h2>
+                  <span className="text-sm text-[var(--ink-soft)]">
+                    <b className="font-mono-num text-[var(--ink)]">{incluidos.length}</b> de{" "}
+                    <span className="font-mono-num">{docs.length}</span> se procesarán
+                  </span>
+                </div>
+                <ul className="divide-y divide-[var(--line)]">
+                  {docs.map((d) => (
+                    <li key={d.id} className="flex items-center gap-3 py-2.5">
+                      <input
+                        type="checkbox"
+                        className="accent-[var(--accent)]"
+                        checked={d.incluido}
+                        onChange={() => toggleIncluir(d.id)}
+                      />
+                      <span className="flex-1 truncate text-sm text-[var(--ink-2)]">
+                        {d.nombre}{" "}
+                        <span className="font-mono-num text-[var(--ink-soft)]">· {d.tamanoKB} KB</span>
+                        {d.motivoFiltro === "skip" && (
+                          <span className="chip ml-2 bg-[var(--paper-2)] text-[var(--ink-soft)]">
+                            saltado por nombre
+                          </span>
+                        )}
+                        {d.motivoFiltro === "force" && (
+                          <span className="chip ml-2 bg-[var(--accent-soft)] text-[var(--accent)]">
+                            relevante
+                          </span>
+                        )}
+                      </span>
+                      <button
+                        onClick={() => quitar(d.id)}
+                        className="text-sm text-[var(--ink-soft)] hover:text-[var(--bad)]"
+                      >
+                        ✕
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <button onClick={procesar} disabled={incluidos.length === 0} className="btn btn-primary">
+                    Procesar {incluidos.length} documento(s) con Gemini
+                  </button>
+                  <button onClick={reiniciar} className="btn btn-ghost">
+                    Limpiar
+                  </button>
+                </div>
+              </section>
+            )}
           </div>
+        )}
 
-          <UploadZone onAdd={(nuevos) => setDocs((d) => [...d, ...nuevos])} />
+        {/* ---------- FASE PROCESANDO ---------- */}
+        {fase === "procesando" && (
+          <section className="card p-6 rise">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-lg font-semibold text-[var(--ink)]">
+                  Procesando {Math.min(progreso.hecho + 1, progreso.total)} de {progreso.total}
+                </p>
+                <p className="mt-1 truncate text-sm text-[var(--ink-soft)]">{progreso.actual}</p>
+              </div>
+              <button
+                onClick={cancelar}
+                className="btn shrink-0 border border-[var(--bad)]/40 bg-[var(--bad)]/5 text-[var(--bad)]"
+              >
+                ✕ Cancelar
+              </button>
+            </div>
+            <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-[var(--paper-2)]">
+              <div
+                className="h-full rounded-full bg-[var(--accent)] transition-all duration-500"
+                style={{ width: `${(progreso.hecho / progreso.total) * 100}%` }}
+              />
+            </div>
+            <p className="mt-2 text-xs text-[var(--ink-soft)]">
+              Pausa de {(PAUSA_MS / 1000).toFixed(1)}s entre documentos para no saturar el límite de Gemini.
+              Puedes cancelar en cualquier momento.
+            </p>
+          </section>
+        )}
 
-          {docs.length > 0 && (
-            <div className="rounded-lg border border-slate-200 bg-white p-4">
-              <h2 className="mb-3 font-semibold text-slate-700">
-                Documentos ({incluidos.length} de {docs.length} se procesarán)
-              </h2>
-              <ul className="divide-y divide-slate-100">
-                {docs.map((d) => (
-                  <li key={d.id} className="flex items-center gap-3 py-2">
-                    <input
-                      type="checkbox"
-                      checked={d.incluido}
-                      onChange={() => toggleIncluir(d.id)}
-                    />
-                    <span className="flex-1 text-sm">
-                      {d.nombre}{" "}
-                      <span className="text-slate-400">({d.tamanoKB} KB)</span>
-                      {d.motivoFiltro === "skip" && (
-                        <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500">
-                          saltado por nombre
-                        </span>
-                      )}
-                      {d.motivoFiltro === "force" && (
-                        <span className="ml-2 rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700">
-                          incluido
-                        </span>
-                      )}
+        {/* ---------- FASE RESULTADO ---------- */}
+        {fase === "resultado" && datos && costeo && (
+          <div className="space-y-6 rise">
+            {/* Resumen del costeo */}
+            <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <SummaryTile label="Valor total $" value={fmtMoney(costeo.totalGeneralUSD)} accent />
+              <SummaryTile label="Valor total S/" value={fmtMoney(costeo.totalGeneralSoles)} />
+              <SummaryTile label="Total gastos $" value={fmtMoney(costeo.totalGastosUSD)} />
+              <SummaryTile
+                label="Productos · gastos"
+                value={`${costeo.productos.length} · ${costeo.gastos.length}`}
+              />
+            </section>
+
+            {/* Clasificación */}
+            <section className="card p-5">
+              <h2 className="mb-3 text-lg font-semibold text-[var(--ink)]">Clasificación de documentos</h2>
+              <ul className="space-y-1.5 text-sm">
+                {docs.filter((d) => d.procesado).map((d) => (
+                  <li key={d.id} className="flex items-center gap-3">
+                    <span className="chip w-32 shrink-0 justify-center bg-[var(--paper-2)] text-[var(--ink-2)]">
+                      {d.error ? "⚠ Error" : TIPO_LABEL[d.resultado?.tipo || "IRRELEVANTE"]}
                     </span>
-                    <button onClick={() => quitar(d.id)} className="text-sm text-red-500">
-                      ✕
-                    </button>
+                    <span className="flex-1 truncate text-[var(--ink-2)]">{d.nombre}</span>
+                    {d.error && <span className="text-xs text-[var(--bad)]">{d.error}</span>}
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 flex gap-2">
-                <button
-                  onClick={procesar}
-                  disabled={incluidos.length === 0}
-                  className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white disabled:opacity-40"
-                >
-                  Procesar {incluidos.length} documento(s) con Gemini
-                </button>
-                <button onClick={reiniciar} className="rounded-md border px-4 py-2 text-slate-600">
-                  Limpiar
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+            </section>
 
-      {/* ---------- FASE PROCESANDO ---------- */}
-      {fase === "procesando" && (
-        <div className="rounded-lg border border-slate-200 bg-white p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0 flex-1">
-              <p className="font-medium text-slate-700">
-                🤖 Procesando {Math.min(progreso.hecho + 1, progreso.total)} de {progreso.total}…
-              </p>
-              <p className="mt-1 truncate text-sm text-slate-500">{progreso.actual}</p>
-            </div>
-            <button
-              onClick={cancelar}
-              className="shrink-0 rounded-md border border-red-300 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600"
+            {/* Editor */}
+            <section className="card p-5">
+              <h2 className="mb-4 text-lg font-semibold text-[var(--ink)]">Extracción (editable)</h2>
+              <ExtraccionEditor datos={datos} onChange={setDatos} />
+            </section>
+
+            {/* Costeo */}
+            <section className="card p-5">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <h2 className="text-lg font-semibold text-[var(--ink)]">Formato de costeo (dólar)</h2>
+                <div className="flex gap-2">
+                  <button onClick={() => exportarExcel(datos)} className="btn btn-accent">
+                    ⬇ Exportar Excel
+                  </button>
+                  <button onClick={reiniciar} className="btn btn-ghost">
+                    Nueva OC
+                  </button>
+                </div>
+              </div>
+              <CosteoView costeo={costeo} />
+            </section>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+// ---- Stepper de fases ----
+function Stepper({ paso }: { paso: number }) {
+  const pasos = ["Cargar", "Procesar", "Revisar y costear"];
+  return (
+    <ol className="mb-7 flex items-center gap-2 text-sm">
+      {pasos.map((label, i) => {
+        const n = i + 1;
+        const activo = n === paso;
+        const hecho = n < paso;
+        return (
+          <li key={label} className="flex items-center gap-2">
+            <span
+              className={`grid h-6 w-6 place-items-center rounded-full font-mono-num text-xs font-semibold ${
+                activo
+                  ? "bg-[var(--ink)] text-white"
+                  : hecho
+                  ? "bg-[var(--ok)] text-white"
+                  : "bg-[var(--paper-2)] text-[var(--ink-soft)]"
+              }`}
             >
-              ✕ Cancelar
-            </button>
-          </div>
-          <div className="mt-3 h-2 w-full overflow-hidden rounded bg-slate-100">
-            <div
-              className="h-full bg-blue-600 transition-all"
-              style={{ width: `${(progreso.hecho / progreso.total) * 100}%` }}
-            />
-          </div>
-          <p className="mt-2 text-xs text-slate-400">
-            Pausa de {(PAUSA_MS / 1000).toFixed(1)}s entre documentos para no saturar el límite de Gemini.
-          </p>
-        </div>
-      )}
+              {hecho ? "✓" : n}
+            </span>
+            <span className={activo ? "font-semibold text-[var(--ink)]" : "text-[var(--ink-soft)]"}>
+              {label}
+            </span>
+            {n < pasos.length && <span className="mx-1 h-px w-8 bg-[var(--line-strong)]" />}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
-      {/* ---------- FASE RESULTADO ---------- */}
-      {fase === "resultado" && datos && costeo && (
-        <div className="space-y-8">
-          {/* Log de clasificación */}
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
-            <h2 className="mb-3 font-semibold text-slate-700">Clasificación de documentos</h2>
-            <ul className="space-y-1 text-sm">
-              {docs.filter((d) => d.procesado).map((d) => (
-                <li key={d.id} className="flex items-center gap-2">
-                  <span className="w-28 shrink-0">
-                    {d.error ? "⚠ Error" : TIPO_LABEL[d.resultado?.tipo || "IRRELEVANTE"]}
-                  </span>
-                  <span className="flex-1 truncate">{d.nombre}</span>
-                  {d.error && <span className="text-xs text-red-500">{d.error}</span>}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Editor de extracción */}
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
-            <h2 className="mb-3 font-semibold text-slate-700">Extracción (editable)</h2>
-            <ExtraccionEditor datos={datos} onChange={setDatos} />
-          </section>
-
-          {/* Costeo */}
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-semibold text-slate-700">Formato de costeo (dólar)</h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => exportarExcel(datos)}
-                  className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white"
-                >
-                  ⬇ Exportar Excel
-                </button>
-                <button onClick={reiniciar} className="rounded-md border px-4 py-2 text-sm text-slate-600">
-                  Nueva OC
-                </button>
-              </div>
-            </div>
-            <CosteoView costeo={costeo} />
-          </section>
-        </div>
-      )}
-    </main>
+// ---- Tarjeta de resumen ----
+function SummaryTile({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className={`card p-4 ${accent ? "ring-1 ring-[var(--accent)]/30" : ""}`}>
+      <div className="text-[11px] uppercase tracking-wide text-[var(--ink-soft)]">{label}</div>
+      <div
+        className={`font-mono-num mt-1 text-xl font-semibold ${
+          accent ? "text-[var(--accent)]" : "text-[var(--ink)]"
+        }`}
+      >
+        {value}
+      </div>
+    </div>
   );
 }

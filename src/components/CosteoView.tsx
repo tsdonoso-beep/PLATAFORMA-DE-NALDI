@@ -51,7 +51,7 @@ export default function CosteoView({ costeo }: { costeo: CosteoResult }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="tbl min-w-max">
+      <table className="tbl tbl-num min-w-max">
         <thead>
           <tr>
             <th>Concepto</th>

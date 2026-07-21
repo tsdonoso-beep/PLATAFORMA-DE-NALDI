@@ -20,7 +20,7 @@ function Edit({
 }) {
   return (
     <input
-      className="cell-edit w-full rounded px-1 py-0.5 outline-none"
+      className={`cell-edit w-full rounded px-1 py-0.5 outline-none ${numeric ? "font-mono-num text-right" : ""}`}
       type={numeric ? "number" : "text"}
       step="any"
       value={value ?? ""}
@@ -85,9 +85,12 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
 
   return (
     <div className="space-y-8">
-      <p className="rounded-md bg-amber-100 px-3 py-2 text-sm text-amber-800">
-        ⚠ Las celdas en amarillo son editables. Corrige lo que Gemini haya extraído mal;
-        el costeo se recalcula solo.
+      <p className="rounded-lg border border-[var(--line-strong)] bg-[var(--edit)] px-3 py-2 text-sm text-[var(--ink-2)]">
+        ⚠ Las celdas en <span className="rounded bg-white/60 px-1">amarillo</span> son editables.
+        Corrige lo que Gemini haya extraído mal; el costeo se recalcula solo. El punto{" "}
+        <span className="inline-block h-2 w-2 rounded-full bg-amber-400 align-middle" /> /{" "}
+        <span className="inline-block h-2 w-2 rounded-full bg-red-400 align-middle" /> marca datos de
+        confianza media / baja.
       </p>
 
       {(datos.factura.moneda || "").toUpperCase() === "EUR" && (
@@ -101,7 +104,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
 
       {/* DATOS GENERALES */}
       <section>
-        <h3 className="mb-2 font-semibold text-slate-700">Datos generales</h3>
+        <h3 className="mb-3 text-base font-semibold text-[var(--ink)]">Datos generales</h3>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
           <Field label="TC USD (soles/dólar)">
             <Edit numeric value={d.tc_usd ?? ""} onChange={(v) => setDua("tc_usd", parseFloat(v) || 0)} />
@@ -160,8 +163,8 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
       {/* PRODUCTOS */}
       <section>
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="font-semibold text-slate-700">Productos ({datos.productos.length})</h3>
-          <button onClick={addProducto} className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+          <h3 className="text-base font-semibold text-[var(--ink)]">Productos ({datos.productos.length})</h3>
+          <button onClick={addProducto} className="btn btn-ghost px-2.5 py-1 text-xs">
             + Agregar
           </button>
         </div>
@@ -210,8 +213,8 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
       {/* GASTOS */}
       <section>
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="font-semibold text-slate-700">Gastos de importación ({datos.gastos.length})</h3>
-          <button onClick={addGasto} className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+          <h3 className="text-base font-semibold text-[var(--ink)]">Gastos de importación ({datos.gastos.length})</h3>
+          <button onClick={addGasto} className="btn btn-ghost px-2.5 py-1 text-xs">
             + Agregar
           </button>
         </div>
