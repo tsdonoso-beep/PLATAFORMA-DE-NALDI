@@ -15,11 +15,20 @@ factor EXW. Exporta a Excel.
 3. **Corregir**: la tabla de extracción es editable (celdas amarillas).
 4. **Costear**: el costeo se recalcula en vivo. Exporta a `.xlsx`.
 
+## API Key (cada usuario la suya)
+
+Igual que el Apps Script, **cada persona configura su propia Gemini API Key**
+(botón "⚙ API Key"). Así cada quien consume su propio límite RPM/RPD y no se
+saturan los 500 RPD entre todos. La key se guarda solo en el navegador
+(`localStorage`) y se manda con cada petición al proxy, que la usa pero **no la
+almacena**. La variable `GEMINI_API_KEY` del servidor queda solo como respaldo
+opcional para desarrollo.
+
 ## Stack
 
 - **Next.js 14** (App Router) + TypeScript + Tailwind.
-- La **API key de Gemini** vive solo en el servidor, en el route handler
-  `src/app/api/extract/route.ts` (proxy). Nunca llega al navegador.
+- Proxy a Gemini en `src/app/api/extract/route.ts`; test de conexión en
+  `src/app/api/test/route.ts`.
 - **ExcelJS** para la exportación (carga dinámica en el cliente).
 
 ## Estructura

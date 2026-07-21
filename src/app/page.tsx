@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import UploadZone from "@/components/UploadZone";
 import ExtraccionEditor from "@/components/ExtraccionEditor";
 import CosteoView from "@/components/CosteoView";
+import ApiKeyConfig from "@/components/ApiKeyConfig";
+import { getApiKey } from "@/lib/apikey";
 import { consolidar } from "@/lib/consolidar";
 import { calcularCosteo } from "@/lib/costeo";
 import { exportarExcel } from "@/lib/excel";
@@ -24,6 +26,9 @@ export default function Home() {
   const [fase, setFase] = useState<Fase>("carga");
   const [datos, setDatos] = useState<DatosOC | null>(null);
   const [progreso, setProgreso] = useState({ hecho: 0, total: 0, actual: "" });
+  const [apiKey, setApiKeyState] = useState("");
+
+  useEffect(() => setApiKeyState(getApiKey()), []);
 
   const costeo = useMemo(() => (datos ? calcularCosteo(datos) : null), [datos]);
   const incluidos = docs.filter((d) => d.incluido);
@@ -36,6 +41,10 @@ export default function Home() {
   async function procesar() {
     const aProcesar = docs.filter((d) => d.incluido);
     if (aProcesar.length === 0) return;
+    if (!apiKey) {
+      alert("Primero configura tu Gemini API Key (botón ⚙ API Key arriba a la derecha).");
+      return;
+    }
     setFase("procesando");
     setProgreso({ hecho: 0, total: aProcesar.length, actual: "" });
 
@@ -51,6 +60,7 @@ export default function Home() {
             nombre: doc.nombre,
             base64: doc.base64,
             mimeType: doc.mimeType,
+            apiKey,
           }),
         });
         const json = await res.json();
@@ -87,13 +97,16 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">
-          Extractor de Costeo de Importaciones
-        </h1>
-        <p className="text-sm text-slate-500">
-          Sube los documentos de la OC → Gemini los clasifica y extrae → corriges → exportas el costeo.
-        </p>
+      <header className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800">
+            Extractor de Costeo de Importaciones
+          </h1>
+          <p className="text-sm text-slate-500">
+            Sube los documentos de la OC → Gemini los clasifica y extrae → corriges → exportas el costeo.
+          </p>
+        </div>
+        <ApiKeyConfig onChange={setApiKeyState} />
       </header>
 
       {/* ---------- FASE CARGA ---------- */}

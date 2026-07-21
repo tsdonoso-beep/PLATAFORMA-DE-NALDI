@@ -16,22 +16,24 @@ interface Body {
   nombre: string;
   base64: string;
   mimeType?: string;
+  apiKey?: string;
 }
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "GEMINI_API_KEY no configurada en el servidor." },
-      { status: 500 }
-    );
-  }
-
   let body: Body;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "JSON inválido." }, { status: 400 });
+  }
+
+  // La key la trae cada usuario (su propio RPM/RPD). El env solo es respaldo dev.
+  const apiKey = (body.apiKey || "").trim() || process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: "Falta la API Key. Configúrala con '⚙ Configurar API Key'." },
+      { status: 401 }
+    );
   }
 
   if (!body.base64) {
