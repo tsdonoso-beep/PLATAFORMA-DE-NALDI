@@ -9,6 +9,7 @@
 
 import type { Workbook, Worksheet, Cell } from "exceljs";
 import { EMPRESA } from "./config";
+import { exwEnUSD, facturaEnEurConvertible } from "./costeo";
 import { DatosOC } from "./types";
 
 // ---------- Paleta (idéntica al script Python) ----------
@@ -70,6 +71,8 @@ interface GenDataset {
 // Convierte el DatosOC de la web al dataset que espera el generador.
 function adaptar(datos: DatosOC): GenDataset {
   const oc = datos.factura.numero_oc || datos.nombre_oc || "";
+  // El formato es en dólares: si la factura es EUR, el EXW se convierte a USD.
+  const convEur = facturaEnEurConvertible(datos);
   return {
     generales: {
       razon_social: EMPRESA.razon_social,
@@ -84,16 +87,20 @@ function adaptar(datos: DatosOC): GenDataset {
       tc_usd: datos.dua.tc_usd || "",
       tc_eur: datos.tc_eur || "",
     },
-    productos: datos.productos.map((p) => ({
-      codigo: p.codigo || "",
-      nombre: p.nombre || "",
-      cantidad: p.cantidad || 0,
-      exw: p.exw_total === null || p.exw_total === undefined ? "" : p.exw_total,
-      moneda: datos.factura.moneda || "USD",
-      partida: p.partida || "",
-      peso: p.peso || "",
-      confianza: p.confianza || "alta",
-    })),
+    productos: datos.productos.map((p) => {
+      const exwRaw = p.exw_total;
+      const vacio = exwRaw === null || exwRaw === undefined;
+      return {
+        codigo: p.codigo || "",
+        nombre: p.nombre || "",
+        cantidad: p.cantidad || 0,
+        exw: vacio ? "" : convEur ? Math.round(exwEnUSD(exwRaw, datos) * 100) / 100 : exwRaw,
+        moneda: convEur ? "USD←EUR" : datos.factura.moneda || "USD",
+        partida: p.partida || "",
+        peso: p.peso || "",
+        confianza: p.confianza || "alta",
+      };
+    }),
     // Solo los gastos que el costeador dejó incluidos entran al costeo.
     gastos: datos.gastos
       .filter((g) => g.incluido !== false)

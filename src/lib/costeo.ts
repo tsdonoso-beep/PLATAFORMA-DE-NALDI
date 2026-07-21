@@ -45,6 +45,23 @@ export interface CosteoResult {
 // Solo cuentan los gastos marcados como incluidos.
 export const gastoCuenta = (g: Gasto): boolean => g.incluido !== false;
 
+// ¿La factura está en euros y se puede convertir a USD?
+export function facturaEnEurConvertible(datos: DatosOC): boolean {
+  const moneda = (datos.factura?.moneda || "USD").toUpperCase();
+  const tcUsd = Number(datos.dua?.tc_usd) || 0;
+  const tcEur = Number(datos.tc_eur) || 0;
+  return moneda === "EUR" && tcUsd > 0 && tcEur > 0;
+}
+
+// Convierte un EXW a USD. Si la factura es EUR y hay ambos TC, aplica
+// EUR→USD = TC_EUR / TC_USD (TC en soles por unidad). Si no, lo deja igual.
+export function exwEnUSD(exw: number, datos: DatosOC): number {
+  if (!facturaEnEurConvertible(datos)) return exw;
+  const tcUsd = Number(datos.dua.tc_usd) || 0;
+  const tcEur = Number(datos.tc_eur) || 0;
+  return exw * (tcEur / tcUsd);
+}
+
 export function calcularCosteo(datos: DatosOC): CosteoResult {
   const productos = datos.productos || [];
   const dua = datos.dua || {};
@@ -52,7 +69,9 @@ export function calcularCosteo(datos: DatosOC): CosteoResult {
   const tcEur = Number(datos.tc_eur) || 0;
   const moneda = datos.factura?.moneda || "USD";
 
-  const totalEXW = productos.reduce((s, p) => s + (Number(p.exw_total) || 0), 0);
+  // EXW en USD (convierte si la factura es EUR).
+  const exwUSD = productos.map((p) => exwEnUSD(Number(p.exw_total) || 0, datos));
+  const totalEXW = exwUSD.reduce((s, v) => s + v, 0);
   const factor = (exw: number) => (totalEXW > 0 ? exw / totalEXW : 0);
 
   const gastosIncluidos = (datos.gastos || []).filter(gastoCuenta);
@@ -63,11 +82,11 @@ export function calcularCosteo(datos: DatosOC): CosteoResult {
     moneda: g.moneda,
     origen: g.origen || "documento",
     montoTotal: Number(g.monto) || 0,
-    porProducto: productos.map((p) => (Number(g.monto) || 0) * factor(Number(p.exw_total) || 0)),
+    porProducto: exwUSD.map((exw) => (Number(g.monto) || 0) * factor(exw)),
   }));
 
   const cprods: CosteoProducto[] = productos.map((p, i) => {
-    const exw = Number(p.exw_total) || 0;
+    const exw = exwUSD[i];
     const fct = factor(exw);
     const totalGastosUSD = gastos.reduce((s, g) => s + g.porProducto[i], 0);
     const valorTotalUSD = exw + totalGastosUSD;

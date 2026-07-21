@@ -1,6 +1,7 @@
 "use client";
 
 import { DatosOC, Gasto, Producto } from "@/lib/types";
+import { facturaEnEurConvertible } from "@/lib/costeo";
 
 interface Props {
   datos: DatosOC;
@@ -88,6 +89,15 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
         ⚠ Las celdas en amarillo son editables. Corrige lo que Gemini haya extraído mal;
         el costeo se recalcula solo.
       </p>
+
+      {(datos.factura.moneda || "").toUpperCase() === "EUR" && (
+        <p className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700">
+          💶 Factura en EUR.{" "}
+          {facturaEnEurConvertible(datos)
+            ? "El EXW se convierte a USD (TC EUR ÷ TC USD) para el costeo en dólares."
+            : "Ingresa TC USD y TC EUR para convertir el EXW a dólares; si no, el costeo tratará el EXW como USD."}
+        </p>
+      )}
 
       {/* DATOS GENERALES */}
       <section>
