@@ -1,0 +1,88 @@
+"use client";
+
+import { CosteoResult } from "@/lib/costeo";
+
+const fmt = (n: number) =>
+  n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pct = (n: number) => (n * 100).toFixed(2) + "%";
+
+export default function CosteoView({ costeo }: { costeo: CosteoResult }) {
+  const P = costeo.productos;
+  if (P.length === 0) {
+    return <p className="text-slate-500">Sin productos: revisa la extracción.</p>;
+  }
+
+  const Row = ({
+    label,
+    vals,
+    total,
+    bg,
+    fmtFn = fmt,
+  }: {
+    label: string;
+    vals: number[];
+    total?: number;
+    bg?: string;
+    fmtFn?: (n: number) => string;
+  }) => (
+    <tr>
+      <td className="font-medium" style={bg ? { background: "#" + bg } : undefined}>
+        {label}
+      </td>
+      {vals.map((v, i) => (
+        <td key={i} className="text-right" style={bg ? { background: "#" + bg } : undefined}>
+          {fmtFn(v)}
+        </td>
+      ))}
+      <td className="text-right font-semibold" style={bg ? { background: "#" + bg } : undefined}>
+        {total !== undefined ? fmtFn(total) : ""}
+      </td>
+    </tr>
+  );
+
+  const sum = (f: (p: (typeof P)[number]) => number) => P.reduce((s, p) => s + f(p), 0);
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="tbl min-w-max">
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            {P.map((p, i) => (
+              <th key={i} className="text-right">
+                {p.nombre || "Prod " + (i + 1)}
+              </th>
+            ))}
+            <th className="text-right">TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <Row label="VALOR EXW" vals={P.map((p) => p.exw)} total={sum((p) => p.exw)} bg="F4CCCC" />
+          <Row label="FLETE" vals={P.map((p) => p.flete)} total={sum((p) => p.flete)} />
+          <Row label="SEGURO" vals={P.map((p) => p.seguro)} total={sum((p) => p.seguro)} />
+          <Row label="CIF" vals={P.map((p) => p.cif)} total={sum((p) => p.cif)} />
+          {costeo.gastos.map((g, gi) => (
+            <Row
+              key={gi}
+              label={g.concepto + (g.esSoles ? " (S/)" : " ($)")}
+              vals={g.porProducto}
+              total={g.montoTotal}
+            />
+          ))}
+          <Row label="TOTAL GASTOS $" vals={P.map((p) => p.totalGastosUSD)} total={sum((p) => p.totalGastosUSD)} bg="F4CCCC" />
+          <Row label="TOTAL GASTOS S/" vals={P.map((p) => p.totalGastosSoles)} total={sum((p) => p.totalGastosSoles)} bg="F4CCCC" />
+          <Row label="VALOR TOTAL $" vals={P.map((p) => p.valorTotalUSD)} total={costeo.totalGeneralUSD} bg="F4CCCC" />
+          <Row label="VALOR TOTAL S/" vals={P.map((p) => p.valorTotalSoles)} total={costeo.totalGeneralSoles} bg="F4CCCC" />
+          <Row label="CANTIDAD" vals={P.map((p) => p.cantidad)} fmtFn={(n) => String(n)} />
+          <Row label="COSTO UNITARIO $" vals={P.map((p) => p.costoUnitUSD)} />
+          <Row label="COSTO UNITARIO S/" vals={P.map((p) => p.costoUnitSoles)} />
+          <Row label="F.I." vals={P.map((p) => p.fi)} bg="D9EAD3" fmtFn={(n) => n.toFixed(4)} />
+          <Row label="FACTOR" vals={P.map((p) => p.factor)} fmtFn={pct} />
+          <Row label="AD-VALOREM" vals={P.map((p) => p.advalorem)} total={sum((p) => p.advalorem)} />
+          <Row label="IPM" vals={P.map((p) => p.ipm)} total={sum((p) => p.ipm)} />
+          <Row label="IGV" vals={P.map((p) => p.igv)} total={sum((p) => p.igv)} />
+        </tbody>
+      </table>
+    </div>
+  );
+}

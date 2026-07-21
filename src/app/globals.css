@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f4f5f7;
+}
+
+body {
+  background: var(--bg);
+  color: #1f2937;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Tabla compacta reutilizable */
+.tbl {
+  @apply w-full border-collapse text-sm;
+}
+.tbl th {
+  @apply bg-slate-100 border border-slate-300 px-2 py-1 text-left font-semibold text-slate-700;
+}
+.tbl td {
+  @apply border border-slate-300 px-2 py-1 align-top;
+}
+.tbl input {
+  @apply w-full bg-transparent outline-none;
+}
+.cell-edit {
+  background: #fffef0;
+}
+.cell-edit:focus-within {
+  background: #fff7cc;
+}
