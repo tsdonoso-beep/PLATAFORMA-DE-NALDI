@@ -94,18 +94,21 @@ function adaptar(datos: DatosOC): GenDataset {
       peso: "",
       confianza: "alta",
     })),
-    gastos: datos.gastos.map((g) => ({
-      seccion: g.seccion || "",
-      concepto: g.concepto || "",
-      fecha: g.fecha || "",
-      proveedor: g.proveedor || "",
-      tipo: g.tipo_comprobante || "",
-      serie: g.serie_numero || "",
-      moneda: g.moneda || "DÓLARES",
-      monto: g.monto === null || g.monto === undefined ? "" : g.monto,
-      igv: "",
-      confianza: "alta",
-    })),
+    // Solo los gastos que el costeador dejó incluidos entran al costeo.
+    gastos: datos.gastos
+      .filter((g) => g.incluido !== false)
+      .map((g) => ({
+        seccion: g.seccion || "",
+        concepto: g.concepto || "",
+        fecha: g.fecha || "",
+        proveedor: g.proveedor || "",
+        tipo: g.tipo_comprobante || "",
+        serie: g.serie_numero || "",
+        moneda: g.moneda || "DÓLARES",
+        monto: g.monto === null || g.monto === undefined ? "" : g.monto,
+        igv: "",
+        confianza: "alta",
+      })),
   };
 }
 

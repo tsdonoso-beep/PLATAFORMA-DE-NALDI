@@ -18,16 +18,23 @@ export default function CosteoView({ costeo }: { costeo: CosteoResult }) {
     total,
     bg,
     fmtFn = fmt,
+    badge,
   }: {
     label: string;
     vals: number[];
     total?: number;
     bg?: string;
     fmtFn?: (n: number) => string;
+    badge?: string;
   }) => (
     <tr>
-      <td className="font-medium" style={bg ? { background: "#" + bg } : undefined}>
+      <td className="whitespace-nowrap font-medium" style={bg ? { background: "#" + bg } : undefined}>
         {label}
+        {badge && (
+          <span className="ml-1 rounded bg-indigo-100 px-1 text-[10px] font-normal text-indigo-600">
+            {badge}
+          </span>
+        )}
       </td>
       {vals.map((v, i) => (
         <td key={i} className="text-right" style={bg ? { background: "#" + bg } : undefined}>
@@ -57,30 +64,24 @@ export default function CosteoView({ costeo }: { costeo: CosteoResult }) {
           </tr>
         </thead>
         <tbody>
-          <Row label="VALOR EXW" vals={P.map((p) => p.exw)} total={sum((p) => p.exw)} bg="F4CCCC" />
-          <Row label="FLETE" vals={P.map((p) => p.flete)} total={sum((p) => p.flete)} />
-          <Row label="SEGURO" vals={P.map((p) => p.seguro)} total={sum((p) => p.seguro)} />
-          <Row label="CIF" vals={P.map((p) => p.cif)} total={sum((p) => p.cif)} />
+          <Row label="VALOR EXW" vals={P.map((p) => p.exw)} total={sum((p) => p.exw)} bg="FCE4EC" />
           {costeo.gastos.map((g, gi) => (
             <Row
               key={gi}
-              label={g.concepto + (g.esSoles ? " (S/)" : " ($)")}
+              label={g.concepto}
               vals={g.porProducto}
               total={g.montoTotal}
+              badge={g.origen === "dua" ? "DUA" : undefined}
             />
           ))}
-          <Row label="TOTAL GASTOS $" vals={P.map((p) => p.totalGastosUSD)} total={sum((p) => p.totalGastosUSD)} bg="F4CCCC" />
-          <Row label="TOTAL GASTOS S/" vals={P.map((p) => p.totalGastosSoles)} total={sum((p) => p.totalGastosSoles)} bg="F4CCCC" />
-          <Row label="VALOR TOTAL $" vals={P.map((p) => p.valorTotalUSD)} total={costeo.totalGeneralUSD} bg="F4CCCC" />
-          <Row label="VALOR TOTAL S/" vals={P.map((p) => p.valorTotalSoles)} total={costeo.totalGeneralSoles} bg="F4CCCC" />
+          <Row label="TOTAL GASTOS $" vals={P.map((p) => p.totalGastosUSD)} total={costeo.totalGastosUSD} bg="FCE4EC" />
+          <Row label="VALOR TOTAL $" vals={P.map((p) => p.valorTotalUSD)} total={costeo.totalGeneralUSD} bg="FCE4EC" />
+          <Row label="VALOR TOTAL S/" vals={P.map((p) => p.valorTotalSoles)} total={costeo.totalGeneralSoles} bg="FCE4EC" />
           <Row label="CANTIDAD" vals={P.map((p) => p.cantidad)} fmtFn={(n) => String(n)} />
-          <Row label="COSTO UNITARIO $" vals={P.map((p) => p.costoUnitUSD)} />
-          <Row label="COSTO UNITARIO S/" vals={P.map((p) => p.costoUnitSoles)} />
+          <Row label="COSTO UNITARIO $" vals={P.map((p) => p.costoUnitUSD)} bg="FFF9C4" />
+          <Row label="COSTO UNITARIO S/" vals={P.map((p) => p.costoUnitSoles)} bg="FFF9C4" />
           <Row label="F.I." vals={P.map((p) => p.fi)} bg="D9EAD3" fmtFn={(n) => n.toFixed(4)} />
           <Row label="FACTOR" vals={P.map((p) => p.factor)} fmtFn={pct} />
-          <Row label="AD-VALOREM" vals={P.map((p) => p.advalorem)} total={sum((p) => p.advalorem)} />
-          <Row label="IPM" vals={P.map((p) => p.ipm)} total={sum((p) => p.ipm)} />
-          <Row label="IGV" vals={P.map((p) => p.igv)} total={sum((p) => p.igv)} />
         </tbody>
       </table>
     </div>

@@ -5,7 +5,7 @@
 
 import { FORCE_INCLUDE, SKIP_NOMBRES } from "./config";
 import { deduplicarGastos } from "./parse";
-import { DatosOC, DocItem, FACTURA_VACIA } from "./types";
+import { DatosOC, DocItem, FACTURA_VACIA, Gasto } from "./types";
 
 // Decide si un documento se salta por su nombre.
 export function clasificarPorNombre(nombre: string): "force" | "skip" | "normal" {
@@ -60,7 +60,13 @@ export function consolidar(docs: DocItem[], nombreOC: string): DatosOC {
       }
 
       case "GASTO": {
-        datos.gastos = datos.gastos.concat(r.gastos || []);
+        // Gastos que vienen como documento (factura, nota). Incluidos por defecto.
+        const docGastos = (r.gastos || []).map((g) => ({
+          ...g,
+          incluido: g.incluido !== false,
+          origen: "documento" as const,
+        }));
+        datos.gastos = datos.gastos.concat(docGastos);
         break;
       }
 
@@ -70,7 +76,49 @@ export function consolidar(docs: DocItem[], nombreOC: string): DatosOC {
   }
 
   datos.gastos = deduplicarGastos(datos.gastos);
+
+  // No perder los montos que Gemini extrajo de la DUA: se convierten en filas
+  // de gasto (origen "dua"), a menos que ya exista un gasto equivalente por
+  // documento. El costeador puede desmarcarlos si no aplican.
+  datos.gastos = datos.gastos.concat(gastosDesdeDua(datos));
+
   // tc_eur editable arranca con lo detectado por Gemini.
   datos.tc_eur = datos.tc_eur_gemini;
   return datos;
+}
+
+// Deriva filas de gasto desde los campos de la DUA (flete, seguro, tributos),
+// evitando duplicar un concepto que ya llegó como documento.
+function gastosDesdeDua(datos: DatosOC): Gasto[] {
+  const d = datos.dua || {};
+  const existentes = datos.gastos.map((g) => (g.concepto || "").toUpperCase());
+  const yaHay = (palabras: string[]) =>
+    existentes.some((c) => palabras.some((p) => c.includes(p)));
+
+  const candidatos: { monto: number; seccion: string; concepto: string; claves: string[] }[] = [
+    { monto: d.flete_usd || 0, seccion: "AG. CARGA", concepto: "FLETE (DUA)", claves: ["FLETE"] },
+    { monto: d.seguro_usd || 0, seccion: "AG. CARGA", concepto: "SEGURO (DUA)", claves: ["SEGURO"] },
+    { monto: d.ad_valorem_usd || 0, seccion: "SUNAT", concepto: "AD-VALOREM", claves: ["AD-VALOREM", "AD VALOREM", "ADVALOREM"] },
+    { monto: d.ipm_usd || 0, seccion: "SUNAT", concepto: "IPM", claves: ["IPM"] },
+    { monto: d.igv_usd || 0, seccion: "SUNAT", concepto: "IGV", claves: ["IGV"] },
+  ];
+
+  const derivados: Gasto[] = [];
+  for (const c of candidatos) {
+    if (c.monto > 0 && !yaHay(c.claves)) {
+      derivados.push({
+        seccion: c.seccion,
+        concepto: c.concepto,
+        fecha: datos.dua.fecha || "",
+        proveedor: "SUNAT / DUA " + (datos.dua.numero || ""),
+        tipo_comprobante: "DUA",
+        serie_numero: datos.dua.numero || "",
+        moneda: "DÓLARES",
+        monto: c.monto,
+        incluido: true,
+        origen: "dua",
+      });
+    }
+  }
+  return derivados;
 }

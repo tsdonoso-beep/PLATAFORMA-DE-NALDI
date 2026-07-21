@@ -50,6 +50,10 @@ export interface Gasto {
   serie_numero: string;
   moneda: string; // "DÓLARES" | "SOLES" | "EUROS"
   monto: number;
+  // Inclusión en el costeo (el costeador del área puede desmarcarlo).
+  incluido?: boolean;
+  // Origen del gasto: "documento" (factura/nota) o "dua" (derivado de la DUA).
+  origen?: "documento" | "dua";
 }
 
 // Resultado normalizado de parsear la respuesta de Gemini para 1 documento.

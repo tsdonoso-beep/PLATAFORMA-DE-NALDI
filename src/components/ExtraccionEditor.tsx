@@ -51,7 +51,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
   const delProducto = (i: number) =>
     onChange({ ...datos, productos: datos.productos.filter((_, idx) => idx !== i) });
 
-  const setGasto = (i: number, k: keyof Gasto, v: string | number) => {
+  const setGasto = (i: number, k: keyof Gasto, v: string | number | boolean) => {
     const gastos = datos.gastos.map((g, idx) => (idx === i ? { ...g, [k]: v } : g));
     onChange({ ...datos, gastos });
   };
@@ -69,6 +69,8 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
           serie_numero: "",
           moneda: "DÓLARES",
           monto: 0,
+          incluido: true,
+          origen: "documento",
         },
       ],
     });
@@ -196,6 +198,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
           <table className="tbl">
             <thead>
               <tr>
+                <th title="Incluir en el costeo">✓</th>
                 <th>Sección</th>
                 <th>Concepto</th>
                 <th>Fecha</th>
@@ -208,9 +211,23 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
               </tr>
             </thead>
             <tbody>
-              {datos.gastos.map((g, i) => (
-                <tr key={i}>
-                  <td className="cell-edit"><Edit value={g.seccion} onChange={(v) => setGasto(i, "seccion", v)} /></td>
+              {datos.gastos.map((g, i) => {
+                const incluido = g.incluido !== false;
+                return (
+                <tr key={i} className={incluido ? "" : "opacity-40"}>
+                  <td className="text-center">
+                    <input
+                      type="checkbox"
+                      checked={incluido}
+                      onChange={(e) => setGasto(i, "incluido", e.target.checked)}
+                    />
+                  </td>
+                  <td className="cell-edit">
+                    <Edit value={g.seccion} onChange={(v) => setGasto(i, "seccion", v)} />
+                    {g.origen === "dua" && (
+                      <span className="ml-1 rounded bg-indigo-100 px-1 text-[10px] text-indigo-600">DUA</span>
+                    )}
+                  </td>
                   <td className="cell-edit"><Edit value={g.concepto} onChange={(v) => setGasto(i, "concepto", v)} /></td>
                   <td className="cell-edit"><Edit value={g.fecha} onChange={(v) => setGasto(i, "fecha", v)} /></td>
                   <td className="cell-edit"><Edit value={g.proveedor} onChange={(v) => setGasto(i, "proveedor", v)} /></td>
@@ -222,9 +239,10 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
                     <button onClick={() => delGasto(i)} className="text-red-500">✕</button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
               {datos.gastos.length === 0 && (
-                <tr><td colSpan={9} className="text-center text-slate-400">Sin gastos detectados</td></tr>
+                <tr><td colSpan={10} className="text-center text-slate-400">Sin gastos detectados</td></tr>
               )}
             </tbody>
           </table>
