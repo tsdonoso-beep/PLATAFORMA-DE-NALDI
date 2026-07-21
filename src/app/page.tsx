@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import UploadZone from "@/components/UploadZone";
 import ExtraccionEditor from "@/components/ExtraccionEditor";
 import CosteoView from "@/components/CosteoView";
 import ApiKeyConfig from "@/components/ApiKeyConfig";
 import { getApiKey } from "@/lib/apikey";
+import { PAUSA_MS } from "@/lib/config";
 import { consolidar } from "@/lib/consolidar";
 import { calcularCosteo } from "@/lib/costeo";
 import { exportarExcel } from "@/lib/excel";
@@ -27,8 +28,31 @@ export default function Home() {
   const [datos, setDatos] = useState<DatosOC | null>(null);
   const [progreso, setProgreso] = useState({ hecho: 0, total: 0, actual: "" });
   const [apiKey, setApiKeyState] = useState("");
+  // Cancelación del procesamiento.
+  const cancelRef = useRef(false);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => setApiKeyState(getApiKey()), []);
+
+  // Sleep interrumpible: se corta apenas se pide cancelar.
+  const pausa = (ms: number) =>
+    new Promise<void>((resolve) => {
+      const t = setInterval(() => {
+        if (cancelRef.current) {
+          clearInterval(t);
+          resolve();
+        }
+      }, 150);
+      setTimeout(() => {
+        clearInterval(t);
+        resolve();
+      }, ms);
+    });
+
+  function cancelar() {
+    cancelRef.current = true;
+    abortRef.current?.abort();
+  }
 
   const costeo = useMemo(() => (datos ? calcularCosteo(datos) : null), [datos]);
   const incluidos = docs.filter((d) => d.incluido);
@@ -45,17 +69,30 @@ export default function Home() {
       alert("Primero configura tu Gemini API Key (botón ⚙ API Key arriba a la derecha).");
       return;
     }
+    cancelRef.current = false;
     setFase("procesando");
     setProgreso({ hecho: 0, total: aProcesar.length, actual: "" });
 
     const actualizados = [...docs];
+    let cancelado = false;
     for (let i = 0; i < aProcesar.length; i++) {
+      if (cancelRef.current) { cancelado = true; break; }
       const doc = aProcesar[i];
       setProgreso({ hecho: i, total: aProcesar.length, actual: doc.nombre });
+
+      // Pausa anti-429 entre documentos (interrumpible), no antes del primero.
+      if (i > 0) {
+        await pausa(PAUSA_MS);
+        if (cancelRef.current) { cancelado = true; break; }
+      }
+
+      const controller = new AbortController();
+      abortRef.current = controller;
       try {
         const res = await fetch("/api/extract", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
             nombre: doc.nombre,
             base64: doc.base64,
@@ -68,22 +105,26 @@ export default function Home() {
         if (!res.ok) {
           actualizados[idx] = { ...doc, procesado: true, error: json.error || "Error" };
         } else {
-          actualizados[idx] = {
-            ...doc,
-            procesado: true,
-            resultado: json.resultado,
-            raw: json.raw,
-          };
+          actualizados[idx] = { ...doc, procesado: true, resultado: json.resultado, raw: json.raw };
         }
         setDocs([...actualizados]);
       } catch (e) {
+        if ((e as Error).name === "AbortError" || cancelRef.current) { cancelado = true; break; }
         const idx = actualizados.findIndex((d) => d.id === doc.id);
         actualizados[idx] = { ...doc, procesado: true, error: (e as Error).message };
         setDocs([...actualizados]);
       }
     }
+    abortRef.current = null;
 
     const nombre = nombreOC.trim() || "OC";
+    const algunoProcesado = actualizados.some((d) => d.procesado);
+    if (cancelado && !algunoProcesado) {
+      // Nada alcanzó a procesarse: vuelve a la carga.
+      setFase("carga");
+      return;
+    }
+    // Consolida lo procesado (parcial si se canceló) y muestra resultados.
     setDatos(consolidar(actualizados, nombre));
     setFase("resultado");
   }
@@ -179,16 +220,29 @@ export default function Home() {
       {/* ---------- FASE PROCESANDO ---------- */}
       {fase === "procesando" && (
         <div className="rounded-lg border border-slate-200 bg-white p-6">
-          <p className="font-medium text-slate-700">
-            🤖 Procesando {progreso.hecho + 1} de {progreso.total}…
-          </p>
-          <p className="mt-1 text-sm text-slate-500">{progreso.actual}</p>
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <p className="font-medium text-slate-700">
+                🤖 Procesando {Math.min(progreso.hecho + 1, progreso.total)} de {progreso.total}…
+              </p>
+              <p className="mt-1 truncate text-sm text-slate-500">{progreso.actual}</p>
+            </div>
+            <button
+              onClick={cancelar}
+              className="shrink-0 rounded-md border border-red-300 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600"
+            >
+              ✕ Cancelar
+            </button>
+          </div>
           <div className="mt-3 h-2 w-full overflow-hidden rounded bg-slate-100">
             <div
               className="h-full bg-blue-600 transition-all"
               style={{ width: `${(progreso.hecho / progreso.total) * 100}%` }}
             />
           </div>
+          <p className="mt-2 text-xs text-slate-400">
+            Pausa de {(PAUSA_MS / 1000).toFixed(1)}s entre documentos para no saturar el límite de Gemini.
+          </p>
         </div>
       )}
 

@@ -4,6 +4,10 @@
 
 export const GEMINI_MODELO = "gemini-3.1-flash-lite-preview";
 
+// Pausa entre documentos (ms) para no saturar el límite RPM de Gemini
+// y dar un punto natural para interrumpir el proceso.
+export const PAUSA_MS = 2500;
+
 // Nombres que, si aparecen, hacen que el documento se salte por defecto.
 export const SKIP_NOMBRES = [
   "swift",
