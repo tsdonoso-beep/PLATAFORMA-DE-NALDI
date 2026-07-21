@@ -38,11 +38,16 @@ Si es FACTURA_COMERCIAL:
       "codigo": "código",
       "cantidad": número,
       "precio_unitario": número,
-      "exw_total": número
+      "exw_total": número,
+      "confianza": "alta | media | baja"
     }
   ],
   "total_exw": número_decimal
 }
+
+CONFIANZA (para cada producto): "alta" si el dato se lee claro y completo;
+"media" si tuviste que inferir algo o el texto es parcialmente legible;
+"baja" si es una suposición o el texto está borroso/incompleto.
 
 REGLA IMPORTANTE para FACTURA_COMERCIAL:
 - NO incluir en productos las líneas de "Transport", "Shipping", "Flete" del proveedor
@@ -80,10 +85,15 @@ Si es GASTO:
       "tipo_comprobante": "FACTURA o NOTA DE CONTABILIDAD o BOLETA",
       "serie_numero": "serie-número exacto (ej: F001-11233 o F205-00552759)",
       "moneda": "DÓLARES o SOLES o EUROS",
-      "monto": número (NETO sin IGV para servicios; total para tributos y notas contabilidad)
+      "monto": número (NETO sin IGV para servicios; total para tributos y notas contabilidad),
+      "confianza": "alta | media | baja"
     }
   ]
 }
+
+CONFIANZA (para cada gasto): "alta" si monto, serie y proveedor se leen claros;
+"media" si alguno se infirió o el texto es parcialmente legible;
+"baja" si es una suposición o el comprobante está borroso/incompleto.
 
 Si es IRRELEVANTE:
 {

@@ -3,7 +3,12 @@
 // Normalizan la respuesta cruda de Gemini a ResultadoDoc.
 // ============================================================
 
-import { Gasto, ResultadoDoc } from "./types";
+import { Confianza, Gasto, ResultadoDoc } from "./types";
+
+const normConfianza = (v: unknown): Confianza => {
+  const s = String(v || "").toLowerCase();
+  return s === "media" || s === "baja" ? (s as Confianza) : "alta";
+};
 
 const num = (v: unknown): number => {
   const n = typeof v === "number" ? v : parseFloat(String(v));
@@ -51,6 +56,7 @@ export function parsearRespuestaMaestra(texto: string): ResultadoDoc {
             cantidad: int(p.cantidad),
             precio_unit: num(p.precio_unitario),
             exw_total: num(p.exw_total),
+            confianza: normConfianza(p.confianza),
           })),
           total_exw: num(obj.total_exw) || num(f.total_exw),
         };
@@ -89,6 +95,7 @@ export function parsearRespuestaMaestra(texto: string): ResultadoDoc {
             serie_numero: (g.serie_numero as string) || "",
             moneda: (g.moneda as string) || "DÓLARES",
             monto: num(g.monto),
+            confianza: normConfianza(g.confianza),
           })),
         };
       }

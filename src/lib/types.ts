@@ -18,12 +18,15 @@ export interface Factura {
   notas: string;
 }
 
+export type Confianza = "alta" | "media" | "baja";
+
 export interface Producto {
   nombre: string;
   codigo: string;
   cantidad: number;
   precio_unit: number;
   exw_total: number;
+  confianza?: Confianza;
 }
 
 export interface Dua {
@@ -54,6 +57,7 @@ export interface Gasto {
   incluido?: boolean;
   // Origen del gasto: "documento" (factura/nota) o "dua" (derivado de la DUA).
   origen?: "documento" | "dua";
+  confianza?: Confianza;
 }
 
 // Resultado normalizado de parsear la respuesta de Gemini para 1 documento.

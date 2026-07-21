@@ -92,7 +92,7 @@ function adaptar(datos: DatosOC): GenDataset {
       moneda: datos.factura.moneda || "USD",
       partida: "",
       peso: "",
-      confianza: "alta",
+      confianza: p.confianza || "alta",
     })),
     // Solo los gastos que el costeador dejó incluidos entran al costeo.
     gastos: datos.gastos
@@ -107,7 +107,7 @@ function adaptar(datos: DatosOC): GenDataset {
         moneda: g.moneda || "DÓLARES",
         monto: g.monto === null || g.monto === undefined ? "" : g.monto,
         igv: "",
-        confianza: "alta",
+        confianza: g.confianza || "alta",
       })),
   };
 }

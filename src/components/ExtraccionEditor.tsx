@@ -45,7 +45,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
       ...datos,
       productos: [
         ...datos.productos,
-        { nombre: "", codigo: "", cantidad: 0, precio_unit: 0, exw_total: 0 },
+        { nombre: "", codigo: "", cantidad: 0, precio_unit: 0, exw_total: 0, confianza: "alta" },
       ],
     });
   const delProducto = (i: number) =>
@@ -71,6 +71,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
           monto: 0,
           incluido: true,
           origen: "documento",
+          confianza: "alta",
         },
       ],
     });
@@ -168,7 +169,12 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
             <tbody>
               {datos.productos.map((p, i) => (
                 <tr key={i}>
-                  <td className="cell-edit"><Edit value={p.nombre} onChange={(v) => setProducto(i, "nombre", v)} /></td>
+                  <td className="cell-edit">
+                    <div className="flex items-center gap-1">
+                      <ConfBadge conf={p.confianza} />
+                      <Edit value={p.nombre} onChange={(v) => setProducto(i, "nombre", v)} />
+                    </div>
+                  </td>
                   <td className="cell-edit"><Edit value={p.codigo} onChange={(v) => setProducto(i, "codigo", v)} /></td>
                   <td className="cell-edit"><Edit numeric value={p.cantidad} onChange={(v) => setProducto(i, "cantidad", parseFloat(v) || 0)} /></td>
                   <td className="cell-edit"><Edit numeric value={p.precio_unit} onChange={(v) => setProducto(i, "precio_unit", parseFloat(v) || 0)} /></td>
@@ -223,10 +229,13 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
                     />
                   </td>
                   <td className="cell-edit">
-                    <Edit value={g.seccion} onChange={(v) => setGasto(i, "seccion", v)} />
-                    {g.origen === "dua" && (
-                      <span className="ml-1 rounded bg-indigo-100 px-1 text-[10px] text-indigo-600">DUA</span>
-                    )}
+                    <div className="flex items-center gap-1">
+                      <ConfBadge conf={g.confianza} />
+                      <Edit value={g.seccion} onChange={(v) => setGasto(i, "seccion", v)} />
+                      {g.origen === "dua" && (
+                        <span className="rounded bg-indigo-100 px-1 text-[10px] text-indigo-600">DUA</span>
+                      )}
+                    </div>
                   </td>
                   <td className="cell-edit"><Edit value={g.concepto} onChange={(v) => setGasto(i, "concepto", v)} /></td>
                   <td className="cell-edit"><Edit value={g.fecha} onChange={(v) => setGasto(i, "fecha", v)} /></td>
@@ -249,6 +258,18 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
         </div>
       </section>
     </div>
+  );
+}
+
+// Punto de color según la confianza reportada por Gemini (semáforo).
+function ConfBadge({ conf }: { conf?: string }) {
+  if (!conf || conf === "alta") return null;
+  const color = conf === "baja" ? "bg-red-400" : "bg-amber-400";
+  return (
+    <span
+      title={"Confianza " + conf + " — revisar este dato"}
+      className={`inline-block h-2.5 w-2.5 shrink-0 rounded-full ${color}`}
+    />
   );
 }
 
