@@ -110,6 +110,18 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
           <Field label="N° Orden de Compra">
             <Edit value={f.numero_oc} onChange={(v) => setFactura("numero_oc", v)} />
           </Field>
+          <Field label="Proyecto">
+            <Edit value={datos.proyecto} onChange={(v) => onChange({ ...datos, proyecto: v })} />
+          </Field>
+          <Field label="Título OC (desaduanaje)">
+            <Edit value={datos.oc_titulo} onChange={(v) => onChange({ ...datos, oc_titulo: v })} />
+          </Field>
+          <Field label="Periodo">
+            <Edit numeric value={datos.periodo} onChange={(v) => onChange({ ...datos, periodo: parseInt(v) || new Date().getFullYear() })} />
+          </Field>
+          <Field label="Tipo de carga">
+            <Edit value={datos.tipo_carga} onChange={(v) => onChange({ ...datos, tipo_carga: v })} />
+          </Field>
           <Field label="FOB USD">
             <Edit numeric value={d.fob_usd ?? 0} onChange={(v) => setDua("fob_usd", parseFloat(v) || 0)} />
           </Field>

@@ -89,6 +89,11 @@ export interface DatosOC {
   gastos: Gasto[];
   tc_eur: number;
   tc_eur_gemini: number;
+  // Campos "generales" del formato de costeo (editables en la UI).
+  proyecto: string;
+  periodo: number;
+  tipo_carga: string;
+  oc_titulo: string;
 }
 
 export const FACTURA_VACIA: Factura = {

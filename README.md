@@ -53,9 +53,29 @@ npm run dev
 
 Abre http://localhost:3000
 
+## Exportación a Excel (dos hojas vinculadas por fórmula)
+
+El `.xlsx` que genera la web es un **port fiel del generador Python del área**
+(`generar_costeo_v3`). Produce dos hojas:
+
+- **EXTRACCION**: datos crudos con semáforo de calidad (🟩 verde = se usa,
+  🟥 rojo = falta obligatorio, 🟨 amarillo = baja confianza).
+- **COSTEO**: réplica del formato del área, **100 % formulado** con
+  `=EXTRACCION!...`. Se edita en EXTRACCION y COSTEO recalcula solo. Incluye
+  bloque FACTOR (prorrateo por EXW), bloque IMPORTACIONES en soles (F.I.,
+  costo unitario, % importación) y un panel de alertas que cuenta datos faltantes.
+
+Se adapta a N productos y M gastos. La fidelidad está verificada con un test de
+regresión contra un Excel de referencia (OC 579-2025): **cero diferencias** en
+valores, fórmulas, formatos de número, colores y celdas combinadas.
+
+```bash
+npm run test:excel   # genera /tmp/generado_ts.xlsx desde el dataset de ejemplo
+```
+
 ## Pendiente / próximas iteraciones
 
 - Afinar el prompt maestro con documentos reales (testing).
-- Fórmulas vivas en el Excel exportado (hoy exporta valores calculados).
+- Capturar en la extracción de Gemini los campos extra del formato (partida
+  arancelaria, peso, confianza por campo, IGV por gasto).
 - Opción de conectar Google Drive (hoy: subida manual).
-- Hoja LOG de extracción en el Excel.

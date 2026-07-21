@@ -223,7 +223,7 @@ export default function Home() {
               <h2 className="font-semibold text-slate-700">Formato de costeo (dólar)</h2>
               <div className="flex gap-2">
                 <button
-                  onClick={() => exportarExcel(datos, costeo)}
+                  onClick={() => exportarExcel(datos)}
                   className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white"
                 >
                   ⬇ Exportar Excel

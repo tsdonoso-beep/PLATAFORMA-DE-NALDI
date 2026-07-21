@@ -27,6 +27,10 @@ export function consolidar(docs: DocItem[], nombreOC: string): DatosOC {
     gastos: [],
     tc_eur: 0,
     tc_eur_gemini: 0,
+    proyecto: "",
+    periodo: new Date().getFullYear(),
+    tipo_carga: "TOTAL",
+    oc_titulo: "",
   };
 
   for (const doc of docs) {
