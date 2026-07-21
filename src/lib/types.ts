@@ -13,6 +13,7 @@ export interface Factura {
   incoterm: string;
   moneda: string; // "USD" | "EUR"
   numero_oc: string;
+  proyecto: string;
   descuento_porcentaje: number;
   total_exw: number;
   notas: string;
@@ -26,6 +27,8 @@ export interface Producto {
   cantidad: number;
   precio_unit: number;
   exw_total: number;
+  partida?: string;
+  peso?: string;
   confianza?: Confianza;
 }
 
@@ -53,6 +56,7 @@ export interface Gasto {
   serie_numero: string;
   moneda: string; // "DÓLARES" | "SOLES" | "EUROS"
   monto: number;
+  igv?: number;
   // Inclusión en el costeo (el costeador del área puede desmarcarlo).
   incluido?: boolean;
   // Origen del gasto: "documento" (factura/nota) o "dua" (derivado de la DUA).
@@ -112,6 +116,7 @@ export const FACTURA_VACIA: Factura = {
   incoterm: "EXW",
   moneda: "USD",
   numero_oc: "",
+  proyecto: "",
   descuento_porcentaje: 0,
   total_exw: 0,
   notas: "",

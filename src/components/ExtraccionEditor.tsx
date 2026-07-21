@@ -45,7 +45,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
       ...datos,
       productos: [
         ...datos.productos,
-        { nombre: "", codigo: "", cantidad: 0, precio_unit: 0, exw_total: 0, confianza: "alta" },
+        { nombre: "", codigo: "", cantidad: 0, precio_unit: 0, exw_total: 0, partida: "", peso: "", confianza: "alta" },
       ],
     });
   const delProducto = (i: number) =>
@@ -69,6 +69,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
           serie_numero: "",
           moneda: "DÓLARES",
           monto: 0,
+          igv: 0,
           incluido: true,
           origen: "documento",
           confianza: "alta",
@@ -158,11 +159,13 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
           <table className="tbl">
             <thead>
               <tr>
-                <th className="w-1/3">Nombre</th>
+                <th className="w-1/4">Nombre</th>
                 <th>Código</th>
                 <th>Cantidad</th>
                 <th>Precio unit.</th>
                 <th>EXW total</th>
+                <th>Partida</th>
+                <th>Peso (kg)</th>
                 <th></th>
               </tr>
             </thead>
@@ -179,13 +182,15 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
                   <td className="cell-edit"><Edit numeric value={p.cantidad} onChange={(v) => setProducto(i, "cantidad", parseFloat(v) || 0)} /></td>
                   <td className="cell-edit"><Edit numeric value={p.precio_unit} onChange={(v) => setProducto(i, "precio_unit", parseFloat(v) || 0)} /></td>
                   <td className="cell-edit"><Edit numeric value={p.exw_total} onChange={(v) => setProducto(i, "exw_total", parseFloat(v) || 0)} /></td>
+                  <td className="cell-edit"><Edit value={p.partida || ""} onChange={(v) => setProducto(i, "partida", v)} /></td>
+                  <td className="cell-edit"><Edit value={p.peso || ""} onChange={(v) => setProducto(i, "peso", v)} /></td>
                   <td className="text-center">
                     <button onClick={() => delProducto(i)} className="text-red-500">✕</button>
                   </td>
                 </tr>
               ))}
               {datos.productos.length === 0 && (
-                <tr><td colSpan={6} className="text-center text-slate-400">Sin productos detectados</td></tr>
+                <tr><td colSpan={8} className="text-center text-slate-400">Sin productos detectados</td></tr>
               )}
             </tbody>
           </table>
@@ -213,6 +218,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
                 <th>Serie/Nro</th>
                 <th>Moneda</th>
                 <th>Monto</th>
+                <th>IGV</th>
                 <th></th>
               </tr>
             </thead>
@@ -244,6 +250,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
                   <td className="cell-edit"><Edit value={g.serie_numero} onChange={(v) => setGasto(i, "serie_numero", v)} /></td>
                   <td className="cell-edit"><Edit value={g.moneda} onChange={(v) => setGasto(i, "moneda", v)} /></td>
                   <td className="cell-edit"><Edit numeric value={g.monto} onChange={(v) => setGasto(i, "monto", parseFloat(v) || 0)} /></td>
+                  <td className="cell-edit"><Edit numeric value={g.igv ?? 0} onChange={(v) => setGasto(i, "igv", parseFloat(v) || 0)} /></td>
                   <td className="text-center">
                     <button onClick={() => delGasto(i)} className="text-red-500">✕</button>
                   </td>
@@ -251,7 +258,7 @@ export default function ExtraccionEditor({ datos, onChange }: Props) {
                 );
               })}
               {datos.gastos.length === 0 && (
-                <tr><td colSpan={10} className="text-center text-slate-400">Sin gastos detectados</td></tr>
+                <tr><td colSpan={11} className="text-center text-slate-400">Sin gastos detectados</td></tr>
               )}
             </tbody>
           </table>

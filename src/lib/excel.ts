@@ -90,8 +90,8 @@ function adaptar(datos: DatosOC): GenDataset {
       cantidad: p.cantidad || 0,
       exw: p.exw_total === null || p.exw_total === undefined ? "" : p.exw_total,
       moneda: datos.factura.moneda || "USD",
-      partida: "",
-      peso: "",
+      partida: p.partida || "",
+      peso: p.peso || "",
       confianza: p.confianza || "alta",
     })),
     // Solo los gastos que el costeador dejó incluidos entran al costeo.
@@ -106,7 +106,7 @@ function adaptar(datos: DatosOC): GenDataset {
         serie: g.serie_numero || "",
         moneda: g.moneda || "DÓLARES",
         monto: g.monto === null || g.monto === undefined ? "" : g.monto,
-        igv: "",
+        igv: g.igv || "",
         confianza: g.confianza || "alta",
       })),
   };

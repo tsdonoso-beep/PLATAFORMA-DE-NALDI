@@ -47,6 +47,7 @@ export function consolidar(docs: DocItem[], nombreOC: string): DatosOC {
         if (nProds > nActual || totalNuevo > totalActual) {
           datos.factura = r.factura || { ...FACTURA_VACIA };
           datos.productos = r.productos || [];
+          if (datos.factura.proyecto) datos.proyecto = datos.factura.proyecto;
         }
         break;
       }

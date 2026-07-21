@@ -28,6 +28,7 @@ Si es FACTURA_COMERCIAL:
     "incoterm": "EXW/CFR/CIF/FOB",
     "moneda": "USD o EUR",
     "numero_oc": "número OC si aparece",
+    "proyecto": "nombre del proyecto o destino si aparece",
     "descuento_porcentaje": número,
     "total_exw": número_decimal,
     "notas": ""
@@ -39,6 +40,8 @@ Si es FACTURA_COMERCIAL:
       "cantidad": número,
       "precio_unitario": número,
       "exw_total": número,
+      "partida": "partida arancelaria si aparece (ej: 8479.89.90.00)",
+      "peso": "peso en kg si aparece",
       "confianza": "alta | media | baja"
     }
   ],
@@ -86,6 +89,7 @@ Si es GASTO:
       "serie_numero": "serie-número exacto (ej: F001-11233 o F205-00552759)",
       "moneda": "DÓLARES o SOLES o EUROS",
       "monto": número (NETO sin IGV para servicios; total para tributos y notas contabilidad),
+      "igv": número (IGV del comprobante si aparece; 0 si no),
       "confianza": "alta | media | baja"
     }
   ]
