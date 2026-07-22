@@ -8,6 +8,7 @@ import {
   pareceKeyValida,
   setApiKey,
 } from "@/lib/apikey";
+import { testConexion } from "@/lib/gemini-client";
 
 export default function ApiKeyConfig({ onChange }: { onChange?: (key: string) => void }) {
   const [abierto, setAbierto] = useState(false);
@@ -44,16 +45,11 @@ export default function ApiKeyConfig({ onChange }: { onChange?: (key: string) =>
     setProbando(true);
     setTestMsg(null);
     try {
-      const res = await fetch("/api/test", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apiKey: input.trim() }),
-      });
-      const json = await res.json();
+      const r = await testConexion(input.trim());
       setTestMsg(
-        json.ok
-          ? { ok: true, texto: "✅ Conexión OK — " + json.modelo }
-          : { ok: false, texto: "❌ " + (json.error || "Error") }
+        r.ok
+          ? { ok: true, texto: "✅ Conexión OK — " + r.modelo }
+          : { ok: false, texto: "❌ " + (r.error || "Error") }
       );
     } catch (e) {
       setTestMsg({ ok: false, texto: "❌ " + (e as Error).message });

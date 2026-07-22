@@ -17,18 +17,18 @@ factor EXW. Exporta a Excel.
 
 ## API Key (cada usuario la suya)
 
-Igual que el Apps Script, **cada persona configura su propia Gemini API Key**
-(botón "⚙ API Key"). Así cada quien consume su propio límite RPM/RPD y no se
-saturan los 500 RPD entre todos. La key se guarda solo en el navegador
-(`localStorage`) y se manda con cada petición al proxy, que la usa pero **no la
-almacena**. La variable `GEMINI_API_KEY` del servidor queda solo como respaldo
-opcional para desarrollo.
+**Cada persona configura su propia Gemini API Key** (botón "⚙ API Key"). Así
+cada quien consume su propio límite RPM/RPD y no se saturan los 500 RPD entre
+todos. La key se guarda solo en el navegador (`localStorage`) y se usa para
+llamar a Gemini **directamente desde el navegador** — no hay servidor de por
+medio. No hardcodees nunca una key compartida en el código.
 
 ## Stack
 
-- **Next.js 14** (App Router) + TypeScript + Tailwind.
-- Proxy a Gemini en `src/app/api/extract/route.ts`; test de conexión en
-  `src/app/api/test/route.ts`.
+- **Next.js 14** (App Router) + TypeScript + Tailwind, exportado como sitio
+  **estático** (`output: "export"`) → alojable en GitHub Pages.
+- Gemini se llama **desde el navegador** (`src/lib/gemini-client.ts`), sin
+  backend.
 - **ExcelJS** para la exportación (carga dinámica en el cliente).
 
 ## Estructura
@@ -36,22 +36,37 @@ opcional para desarrollo.
 | Archivo | Rol |
 |---|---|
 | `src/lib/prompt.ts` | Prompt maestro (el "cerebro"). Se itera aquí con el testing. |
+| `src/lib/gemini-client.ts` | Llamada a Gemini desde el navegador + test de conexión. |
 | `src/lib/parse.ts` | Normaliza la respuesta de Gemini. |
 | `src/lib/consolidar.ts` | Filtro por nombre + consolidación de la OC. |
 | `src/lib/costeo.ts` | Prorrateo por factor EXW → tabla de costeo. |
 | `src/lib/excel.ts` | Exportación a `.xlsx`. |
-| `src/app/api/extract/route.ts` | Proxy a Gemini (API key server-side). |
 | `src/app/page.tsx` | Orquestación del flujo. |
 
 ## Desarrollo
 
 ```bash
 npm install
-cp .env.example .env.local   # y pon tu GEMINI_API_KEY
 npm run dev
 ```
 
-Abre http://localhost:3000
+Abre http://localhost:3000 (en dev no hace falta `.env`; configura tu API Key
+desde el botón ⚙).
+
+## Despliegue en GitHub Pages
+
+La app se exporta como sitio estático a `./out`. El repo incluye un workflow
+(`.github/workflows/deploy.yml`) que la publica automáticamente.
+
+1. Sube el código a la rama **`main`** de `tsdonoso-beep/PLATAFORMA-DE-NALDI`.
+2. En GitHub: **Settings → Pages → Build and deployment → Source: GitHub
+   Actions**.
+3. Cada push a `main` construye y publica en:
+   **https://tsdonoso-beep.github.io/PLATAFORMA-DE-NALDI/**
+
+> El `basePath` (`/PLATAFORMA-DE-NALDI`) se aplica solo en producción; en
+> desarrollo la app corre en la raíz. Si cambias el nombre del repo, actualiza
+> la constante `repo` en `next.config.mjs`.
 
 ## Exportación a Excel (dos hojas vinculadas por fórmula)
 

@@ -6,6 +6,7 @@ import ExtraccionEditor from "@/components/ExtraccionEditor";
 import CosteoView from "@/components/CosteoView";
 import ApiKeyConfig from "@/components/ApiKeyConfig";
 import { getApiKey } from "@/lib/apikey";
+import { extraerDocumento } from "@/lib/gemini-client";
 import { PAUSA_MS } from "@/lib/config";
 import { consolidar } from "@/lib/consolidar";
 import { calcularCosteo } from "@/lib/costeo";
@@ -89,24 +90,16 @@ export default function Home() {
       const controller = new AbortController();
       abortRef.current = controller;
       try {
-        const res = await fetch("/api/extract", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({
-            nombre: doc.nombre,
-            base64: doc.base64,
-            mimeType: doc.mimeType,
-            apiKey,
-          }),
-        });
-        const json = await res.json();
+        // Llamada directa a Gemini desde el navegador (sin backend).
+        const { resultado, raw } = await extraerDocumento(
+          doc.nombre,
+          doc.base64,
+          doc.mimeType,
+          apiKey,
+          controller.signal
+        );
         const idx = actualizados.findIndex((d) => d.id === doc.id);
-        if (!res.ok) {
-          actualizados[idx] = { ...doc, procesado: true, error: json.error || "Error" };
-        } else {
-          actualizados[idx] = { ...doc, procesado: true, resultado: json.resultado, raw: json.raw };
-        }
+        actualizados[idx] = { ...doc, procesado: true, resultado, raw };
         setDocs([...actualizados]);
       } catch (e) {
         if ((e as Error).name === "AbortError" || cancelRef.current) { cancelado = true; break; }
@@ -147,7 +140,11 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/inroprin-logo.svg" alt="INROPRIN — Industrias Roland Print" className="h-10 w-10" />
+            <img
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/inroprin-logo.svg`}
+              alt="INROPRIN — Industrias Roland Print"
+              className="h-10 w-10"
+            />
             <div className="leading-tight">
               <div className="font-display text-[17px] font-bold tracking-tight text-[var(--ink)]">
                 INROPRIN
