@@ -26,12 +26,6 @@ jobs:
           node-version: 20
           cache: npm
 
-      # Habilita GitHub Pages automáticamente en la primera corrida
-      # (no hace falta activarlo a mano en Settings → Pages).
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
       - run: npm ci
 
       - name: Build estático (Next export → ./out)
