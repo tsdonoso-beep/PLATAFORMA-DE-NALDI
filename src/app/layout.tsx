@@ -22,8 +22,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Costeo OC — Extractor de Importaciones",
-  description: "Lee documentos de importación y arma el costeo de una OC.",
+  title: "INROPRIN · Costeo de Importaciones",
+  description:
+    "Industrias Roland Print — lee documentos de importación y arma el costeo de una OC.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

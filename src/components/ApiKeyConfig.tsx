@@ -66,10 +66,10 @@ export default function ApiKeyConfig({ onChange }: { onChange?: (key: string) =>
     <div className="relative">
       <button
         onClick={() => setAbierto((v) => !v)}
-        className={`rounded-md border px-3 py-1.5 text-sm ${
+        className={`rounded-lg border px-3 py-1.5 text-sm transition ${
           keyGuardada
-            ? "border-green-300 bg-green-50 text-green-700"
-            : "border-amber-300 bg-amber-50 text-amber-700"
+            ? "border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)]"
+            : "border-[var(--brand)]/40 bg-[var(--brand)]/10 text-[var(--brand)]"
         }`}
       >
         ⚙ API Key {keyGuardada ? `· ${maskApiKey(keyGuardada)}` : "· sin configurar"}
@@ -90,7 +90,7 @@ export default function ApiKeyConfig({ onChange }: { onChange?: (key: string) =>
             onChange={(e) => setInput(e.target.value)}
           />
           <div className="mt-3 flex flex-wrap gap-2">
-            <button onClick={guardar} className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white">
+            <button onClick={guardar} className="rounded-lg bg-[var(--ink)] px-3 py-1.5 text-sm text-white">
               Guardar
             </button>
             <button

@@ -146,15 +146,14 @@ export default function Home() {
       <header className="sticky top-0 z-20 border-b border-[var(--line)] bg-[var(--paper)]/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
           <div className="flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-[var(--ink)] font-mono-num text-sm font-semibold text-white">
-              OC
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/inroprin-logo.svg" alt="INROPRIN — Industrias Roland Print" className="h-10 w-10" />
             <div className="leading-tight">
-              <div className="font-display text-[15px] font-semibold text-[var(--ink)]">
-                Costeo de Importaciones
+              <div className="font-display text-[17px] font-bold tracking-tight text-[var(--ink)]">
+                INROPRIN
               </div>
               <div className="text-[11px] uppercase tracking-wide text-[var(--ink-soft)]">
-                INROPRIN · Extractor + Costeo
+                Costeo de Importaciones
               </div>
             </div>
           </div>
