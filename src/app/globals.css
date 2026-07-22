@@ -10,24 +10,25 @@
           rojo = error/cancelar · amarillo = celdas editables.
    ============================================================ */
 :root {
-  --paper: #eef2f6;
-  --paper-2: #e3e9f0;
+  --paper: #f5f6f8; /* casi blanco, como la web */
+  --paper-2: #eef0f3;
   --surface: #ffffff;
-  --ink: #0e3454; /* azul marca oscurecido — texto y botón primario */
-  --ink-2: #2a557a;
-  --ink-soft: #6a7c90;
-  --line: #dbe3ec;
-  --line-strong: #c6d2df;
-  --brand: #036eb1; /* azul INROPRIN */
+  --ink: #191c20; /* casi negro — texto/titulares, como la web */
+  --ink-2: #3b4149;
+  --ink-soft: #6b7280;
+  --line: #e6e8ec;
+  --line-strong: #d3d7dd;
+  --brand: #036eb1; /* azul INROPRIN — botón primario / activo */
+  --brand-deep: #025a91;
   --accent: #01a298; /* teal INROPRIN — CTA positiva */
   --accent-soft: #d6f0ee;
   --ok: #01a298;
   --warn: #d9a400;
   --bad: #e30613; /* rojo INROPRIN */
   --edit: #fff6cc; /* tinte del amarillo de marca */
-  --radius: 12px;
-  --shadow: 0 1px 2px rgba(14, 52, 84, 0.05), 0 8px 24px -12px rgba(14, 52, 84, 0.2);
-  --shadow-sm: 0 1px 2px rgba(14, 52, 84, 0.07);
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(20, 25, 31, 0.05), 0 10px 26px -14px rgba(20, 25, 31, 0.22);
+  --shadow-sm: 0 1px 2px rgba(20, 25, 31, 0.07);
 }
 
 * {
@@ -36,20 +37,20 @@
 
 body {
   background:
-    radial-gradient(1100px 560px at 100% -5%, rgba(1, 162, 152, 0.07), transparent 60%),
-    radial-gradient(900px 520px at -8% 0%, rgba(3, 110, 177, 0.08), transparent 55%),
+    radial-gradient(1100px 560px at 100% -5%, rgba(1, 162, 152, 0.05), transparent 60%),
+    radial-gradient(900px 520px at -8% 0%, rgba(3, 110, 177, 0.06), transparent 55%),
     var(--paper);
   color: var(--ink);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--font-display), Georgia, serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-body), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
 .font-mono-num {
@@ -69,20 +70,27 @@ h3 {
   border: 1px solid var(--line);
 }
 
-/* ---- Botones ---- */
+/* ---- Botones (pill, como INROPRIN) ---- */
 .btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition;
   font-family: var(--font-body);
 }
 .btn-primary {
-  background: var(--ink);
+  background: var(--brand);
   color: #fff;
 }
 .btn-primary:hover {
-  background: #0f1a2e;
+  background: var(--brand-deep);
 }
 .btn-primary:disabled {
   opacity: 0.4;
+}
+.btn-dark {
+  background: var(--ink);
+  color: #fff;
+}
+.btn-dark:hover {
+  filter: brightness(1.15);
 }
 .btn-accent {
   background: var(--accent);
