@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 
-// Nombre del repo → base path en GitHub Pages (tsdonoso-beep.github.io/<repo>/).
-const repo = "PLATAFORMA-DE-NALDI";
+// Base path en GitHub Pages (tsdonoso-beep.github.io/<repo>/).
+// En GitHub Actions, GITHUB_REPOSITORY = "owner/repo": derivamos el nombre real
+// del repo automáticamente, así renombrar el repo NO requiere tocar el código.
 const isProd = process.env.NODE_ENV === "production";
+const repoFromCI = process.env.GITHUB_REPOSITORY?.split("/")[1];
+const repo = repoFromCI || "PLATAFORMA-DE-NALDI";
 const basePath = isProd ? `/${repo}` : "";
 
 const nextConfig = {
